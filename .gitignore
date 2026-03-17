@@ -1,0 +1,93 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Виртуальные окружения
+venv/
+env/
+ENV/
+.conda/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Логи
+*.log
+!logs/.gitkeep
+
+# Кэш
+cache/
+!cache/.gitkeep
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 🔥 Модели (тяжёлые файлы)
+llm_models/
+!llm_models/.gitkeep
+
+# 🔥 Данные (SQLite БД, схемы, эмбеддинги)
+data/*
+!data/.gitkeep
+*.sqlite
+*.db
+*.sqlite3
+schema.sql
+*.parquet
+*.pkl
+*.bin
+
+# 🔥 Vector DB (Qdrant)
+qdrant_storage/
+!qdrant_storage/.gitkeep
+
+# 🔥 Debug папка
+debug/
+!debug/.gitkeep
+
+# 🔥 Environment файлы (кроме .env для локальной разработки)
+.env.docker
+.env.example
+.env.local
+.env.*.local
+
+# 🔥 Скрипты запуска (локальные)
+run.bat
+run.sh
+start.bat
+
+# Docker
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Временные файлы
+*.tmp
+*.bak
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ML артефакты
+*.pt
+*.pth
+*.onnx
+*.pb
+
+# bat файлы
+run.bat
