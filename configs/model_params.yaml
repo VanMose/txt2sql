@@ -1,0 +1,74 @@
+# configs\model_params.yaml
+# Конфигурация параметров моделей
+# Изменяйте значения для тонкой настройки инференса
+
+# Параметры по умолчанию
+defaults:
+  max_new_tokens: 80
+  max_judge_tokens: 50
+  temperature: 0.0
+  top_p: 0.95
+  repetition_penalty: 1.05
+  do_sample: false
+
+# Параметры для каждой модели (переопределяют defaults)
+models:
+  Qwen2.5-Coder-0.5B:
+    max_new_tokens: 60
+    max_judge_tokens: 50
+    temperature: 0.0
+    top_p: 0.95
+    repetition_penalty: 1.05
+
+  Qwen2.5-Coder-1.5B:
+    max_new_tokens: 60
+    max_judge_tokens: 50
+    temperature: 0.0
+    top_p: 0.95
+    repetition_penalty: 1.05
+
+  Qwen2.5-Coder-3B:
+    max_new_tokens: 60
+    max_judge_tokens: 50
+    temperature: 0.0
+    top_p: 0.95
+    repetition_penalty: 1.05
+    
+  Qwen2.5-Coder-3B-Instruct:
+    max_new_tokens: 60
+    max_judge_tokens: 50
+    temperature: 0.1
+    top_p: 0.95
+    repetition_penalty: 1.05
+    
+  sqlcoder-7b-2:
+    max_new_tokens: 80
+    max_judge_tokens: 60
+    temperature: 0.0
+    top_p: 0.95
+    repetition_penalty: 1.1
+    
+  sqlcoder-7b-2-instruct:
+    max_new_tokens: 80
+    max_judge_tokens: 60
+    temperature: 0.1
+    top_p: 0.95
+    repetition_penalty: 1.1
+
+# Параметры квантования
+quantization:
+  load_in_4bit: true
+  bnb_4bit_compute_dtype: bfloat16
+  bnb_4bit_quant_type: nf4
+  bnb_4bit_use_double_quant: true
+
+# Retry логика
+retry:
+  max_retries: 5
+  confidence_threshold: 0.5
+
+# Логирование
+logging:
+  level: INFO
+  format: "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
+  file: logs/text2sql.log

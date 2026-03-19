@@ -1,0 +1,103 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "text2sql"
+version = "0.1.2"
+description = "Text-to-SQL Pipeline с Ollama LLM и Hybrid RAG"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+keywords = ["text2sql", "llm", "sql", "nlp", "ollama", "qwen"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    # Core
+    "streamlit>=1.32.0",
+    "pandas>=2.0.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.2.0",
+    "python-dotenv>=1.0.0",
+    
+    # Data
+    "numpy>=1.26.0",
+    "polars>=1.0.0",
+    "sqlalchemy>=2.0.0",
+    
+    # LLM - Ollama (Primary)
+    "ollama>=0.2.0",
+    
+    # LLM - Transformers (Fallback)
+    "transformers>=4.40.0",
+    "torch>=2.2.0",
+    "accelerate>=0.28.0",
+    "bitsandbytes>=0.42.0",
+    
+    # Vector DB
+    "qdrant-client>=1.7.0",
+    
+    # Graph DB
+    "neo4j>=5.0.0",
+    
+    # Orchestration
+    "langgraph>=0.0.1",
+    
+    # Embeddings & Reranking
+    "sentence-transformers>=2.7.0",
+    "cachetools>=5.3.0",
+    
+    # Monitoring
+    "prometheus-client>=0.19.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=24.0.0",
+    "ruff>=0.3.0",
+]
+vllm = [
+    "vllm>=0.2.0",
+]
+flash-attn = [
+    "flash-attn>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/text2sql"
+Repository = "https://github.com/yourusername/text2sql.git"
+Documentation = "https://github.com/yourusername/text2sql#readme"
+
+[project.scripts]
+text2sql = "app.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "app*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "-v --cov=src --cov-report=term-missing"
