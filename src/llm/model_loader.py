@@ -29,6 +29,7 @@ logger = logging.getLogger(__name__)
 
 class LLMBackend(Enum):
     """Типы LLM backend."""
+    OLLAMA = "ollama"
     VLLM = "vllm"
     TRANSFORMERS = "transformers"
     MOCK = "mock"

@@ -1,4 +1,4 @@
-# Text-to-SQL Pipeline v2.0 - Production Requirements
+# Text-to-SQL Pipeline v0.1.2 - Production Requirements
 # pip install -r requirements.txt
 
 # ===========================================
@@ -15,14 +15,16 @@ polars>=1.0.0
 sqlalchemy>=2.0.0
 
 # ===========================================
-# LLM & Transformers
+# LLM - Ollama (Primary Backend)
+# ===========================================
+ollama>=0.2.0
+
+# ===========================================
+# LLM - Transformers (Fallback)
 # ===========================================
 transformers>=4.40.0
 torch>=2.2.0
 accelerate>=0.28.0
-sentence-transformers>=2.7.0
-
-# Quantization
 bitsandbytes>=0.42.0
 
 # ===========================================
@@ -41,42 +43,18 @@ neo4j>=5.0.0
 langgraph>=0.0.1
 
 # ===========================================
-# Reranking (Optional but recommended)
+# Embeddings & Reranking
 # ===========================================
-# sentence-transformers includes CrossEncoder
-# bge-reranker-base for production reranking
-
-# ===========================================
-# Caching
-# ===========================================
+sentence-transformers>=2.7.0
 cachetools>=5.3.0
 
 # ===========================================
 # UI
 # ===========================================
 streamlit>=1.32.0
+pandas>=2.0.0
 
 # ===========================================
-# Monitoring & Observability
+# Monitoring
 # ===========================================
 prometheus-client>=0.19.0
-
-# ===========================================
-# Testing (Dev)
-# ===========================================
-# pytest>=8.0.0
-# pytest-cov>=4.0.0
-# pytest-asyncio>=0.23.0
-
-# ===========================================
-# Linting & Formatting (Dev)
-# ===========================================
-# black>=24.0.0
-# ruff>=0.3.0
-# mypy>=1.8.0
-
-# ===========================================
-# Optional Performance
-# ===========================================
-# flash-attn>=2.0.0  # Flash Attention 2
-# vllm>=0.2.0        # vLLM for faster inference

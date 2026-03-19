@@ -85,8 +85,13 @@ class Settings(BaseSettings):
     # LLM Model Settings
     # ===========================================
 
+    # Ollama Settings (primary)
+    use_ollama: bool = Field(default=True, description="Использовать Ollama API")
+    ollama_base_url: str = Field(default="http://localhost:11434", description="URL Ollama сервера")
+    
+    # Transformers Settings (fallback)
     llm_model: str = Field(default="Qwen2.5-Coder-1.5B", description="Модель для генерации SQL и judge")
-    use_local_model: bool = Field(default=True)
+    use_local_model: bool = Field(default=False)
     gpu_memory_utilization: float = Field(default=0.95, ge=0.1, le=1.0)
 
     # Generation Parameters

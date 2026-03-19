@@ -1,12 +1,13 @@
 # src\llm\inference.py
 """
-Оптимизированный LLM сервис с retry и rate limiting.
+Оптимизированный LLM сервис с Ollama backend.
 
 Оптимизации:
-1. Retry with exponential backoff
-2. Rate limiting (token bucket)
-3. Batch generation
-4. Metrics tracking
+1. Ollama API (быстрый llama.cpp backend)
+2. Retry with exponential backoff
+3. Rate limiting
+4. Batch generation
+5. Metrics tracking
 
 Использование:
     from llm.inference import LLMService
@@ -35,6 +36,7 @@ class LLMService:
     Оптимизированный сервис для генерации текста.
 
     Features:
+    - Ollama API (primary backend)
     - Retry с exponential backoff
     - Rate limiting
     - Batch generation
@@ -55,14 +57,37 @@ class LLMService:
             use_retry: Использовать retry logic.
             use_rate_limit: Использовать rate limiting.
         """
-        self.backend = ModelLoader.get_backend()
-        if force_backend:
-            self.backend = force_backend
+        settings = get_settings()
+        
+        # Приоритет: Ollama > vLLM > Transformers > Mock
+        if settings.use_ollama:
+            self.backend = LLMBackend.OLLAMA
+            self.ollama_service = self._init_ollama(settings)
+        else:
+            self.backend = ModelLoader.get_backend()
+            if force_backend:
+                self.backend = force_backend
+            self.ollama_service = None
 
         self.use_retry = use_retry
         self.use_rate_limit = use_rate_limit
 
         logger.info(f"LLMService initialized with backend: {self.backend.value}")
+
+    def _init_ollama(self, settings: Any) -> Any:
+        """Инициализировать Ollama сервис."""
+        try:
+            from .ollama_service import OllamaService
+            
+            return OllamaService(
+                model_name=settings.llm_model,
+                base_url=settings.ollama_base_url,
+                timeout=120,
+            )
+        except Exception as e:
+            logger.error(f"Failed to initialize Ollama: {e}")
+            logger.warning("Falling back to Transformers/Mock backend")
+            return None
 
     @retry_with_backoff(
         max_retries=3,
@@ -100,10 +125,16 @@ class LLMService:
 
         settings = get_settings()
 
-        if self.backend == LLMBackend.VLLM:
+        # Ollama backend (primary)
+        if self.backend == LLMBackend.OLLAMA and self.ollama_service:
+            return self._generate_ollama(prompt, n, temperature, settings)
+        # vLLM backend
+        elif self.backend == LLMBackend.VLLM:
             return self._generate_vllm(prompt, n, temperature, settings)
+        # Transformers backend
         elif self.backend == LLMBackend.TRANSFORMERS:
             return self._generate_transformers(prompt, n, temperature, settings)
+        # Mock backend (fallback)
         else:
             return self._generate_mock(prompt, n, temperature, settings)
 
@@ -128,7 +159,16 @@ class LLMService:
         """
         results: List[List[str]] = []
 
-        # Обработка батчами
+        # Ollama batch generation
+        if self.backend == LLMBackend.OLLAMA and self.ollama_service:
+            return self.ollama_service.generate_batch(
+                prompts=prompts,
+                n=n,
+                temperature=temperature,
+                max_tokens=get_settings().max_tokens,
+            )
+
+        # Обработка батчами для других backend'ов
         for i in range(0, len(prompts), batch_size):
             batch_prompts = prompts[i : i + batch_size]
 
@@ -155,6 +195,31 @@ class LLMService:
                     results.append(result)
 
         return results
+
+    def _generate_ollama(
+        self,
+        prompt: str,
+        n: int,
+        temperature: float,
+        settings: Any,
+    ) -> List[str]:
+        """Генерация через Ollama."""
+        if not self.ollama_service:
+            logger.error("Ollama service not initialized")
+            return []
+        
+        try:
+            texts = self.ollama_service.generate(
+                prompt=prompt,
+                n=n,
+                temperature=temperature,
+                max_tokens=settings.max_tokens,
+            )
+            logger.info(f"Ollama generated {len(texts)} outputs")
+            return texts
+        except Exception as e:
+            logger.error(f"Ollama generation error: {e}")
+            return []
 
     def _generate_vllm(
         self,
@@ -252,8 +317,13 @@ class LLMService:
 
     def get_stats(self) -> dict:
         """Получить статистику."""
-        return {
+        stats = {
             "backend": self.backend.value,
             "retry_enabled": self.use_retry,
             "rate_limit_enabled": self.use_rate_limit,
         }
+        
+        if self.backend == LLMBackend.OLLAMA and self.ollama_service:
+            stats.update(self.ollama_service.get_stats())
+        
+        return stats
