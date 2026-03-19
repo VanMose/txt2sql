@@ -243,6 +243,9 @@ class MultiDBPipeline:
     def index_databases(self, force_reindex: bool = False) -> None:
         """Индексировать все базы данных в Vector и Graph DB."""
         logger.info(f"Indexing {len(self.db_paths)} databases...")
+        
+        # 🔥 Логирование списка баз данных для индексации
+        logger.info(f"Databases to index: {[Path(p).parent.name for p in self.db_paths]}")
 
         if force_reindex:
             logger.info("Force reindex: Recreating Vector DB collection...")
@@ -257,6 +260,10 @@ class MultiDBPipeline:
                 loader = SchemaLoader(db_path)
                 tables = loader.load_full_schema(include_row_count=True)
                 logger.info(f"Processing {db_name}: {len(tables)} tables")
+                
+                # 🔥 Логирование количества строк в таблицах
+                total_rows = sum(t.row_count or 0 for t in tables)
+                logger.info(f"  Total rows in {db_name}: {total_rows}")
 
                 # Vector DB - добавляем русские синонимы для лучшего поиска
                 table_docs = [
@@ -299,6 +306,12 @@ class MultiDBPipeline:
                 raise
 
         logger.info(f"Indexing complete: {len(self.db_paths)} databases")
+        
+        # 🔥 Финальная статистика
+        vector_stats = self.vector_db.get_stats()
+        logger.info(f"Vector DB stats: {vector_stats.get('points_count', 0)} points")
+        graph_stats = self.graph_db.get_stats()
+        logger.info(f"Graph DB stats: {graph_stats.get('tables', 0)} tables")
 
     def _measure_time(self, func: Any, *args: Any, **kwargs: Any) -> tuple:
         """Измерить время выполнения функции."""

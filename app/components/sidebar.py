@@ -101,13 +101,14 @@ def render_sidebar() -> None:
         # Databases
         st.subheader("🗄️ Базы данных")
         db_paths = st.session_state.get("db_paths", [])
-        
+
         if db_paths:
             with st.expander("📁 Файлы БД", expanded=False):
+                st.caption(f"Всего БД: {len(db_paths)}")
                 for db_path in db_paths:
                     db_name = Path(db_path).stem
                     info = load_database_info(db_path)
-                    
+
                     if info.get("error"):
                         st.error(f"• {db_name}: {info['error']}")
                     else:
@@ -116,24 +117,47 @@ def render_sidebar() -> None:
                             st.text(f"• {db_name}: {info['tables_count']} таблиц")
                         with cols[1]:
                             st.text(f"{info['load_time_ms']:.0f}мс")
-                        
+
                         # Schema viewer - 🔥 уникальная кнопка
                         key = f"schema_{hashlib.md5(db_path.encode()).hexdigest()[:8]}"
                         if st.button("👁️ Схема", key=key, use_container_width=True):
                             st.session_state.show_schema_for = db_path
                             st.rerun()
-                        
+
                         # Показываем схему если выбрана
                         if st.session_state.get("show_schema_for") == db_path:
                             with st.expander(f"Схема {db_name}", expanded=True):
                                 render_database_schema(db_path, db_name)
-                                
+
                                 # Кнопка закрыть
                                 if st.button("✕ Закрыть", key=f"close_{key}"):
                                     st.session_state.show_schema_for = None
                                     st.rerun()
         else:
             st.info("Нет подключенных БД")
+
+        # 🔥 Vector DB Content - показываем что реально индексировано
+        if st.session_state.get("service"):
+            with st.expander("🔍 Vector DB содержимое", expanded=False):
+                stats = st.session_state.service.get_vector_db_stats()
+                points_count = stats.get("points_count", 0)
+                st.caption(f"Всего точек: {points_count}")
+                
+                if points_count > 0 and st.session_state.get("service") and st.session_state.service._pipeline:
+                    # Показываем распределение по базам данных
+                    try:
+                        all_tables = st.session_state.service._pipeline.vector_db.get_all_tables()
+                        db_counts = {}
+                        for table in all_tables:
+                            db_name = table.db_name
+                            db_counts[db_name] = db_counts.get(db_name, 0) + 1
+                        
+                        if db_counts:
+                            st.markdown("**Распределение по БД:**")
+                            for db_name, count in sorted(db_counts.items()):
+                                st.text(f"  {db_name}: {count} таблиц")
+                    except Exception as e:
+                        st.caption(f"Не удалось получить детали: {e}")
 
         st.divider()
 
@@ -183,9 +207,30 @@ def render_sidebar() -> None:
             if st.button("🔄 Индекс", use_container_width=True):
                 if st.session_state.get("service"):
                     with st.spinner("Индексация..."):
+                        # 🔥 FIX: Переоткрываем базы данных перед переиндексацией
+                        from src.config.settings import get_settings
+                        
+                        settings = get_settings()
+                        data_dir = Path(settings.base_dir) / "data"
+                        current_db_paths = DatabaseDiscoveryService.discover(str(data_dir))
+                        
+                        # Проверяем, изменился ли список баз данных
+                        if set(current_db_paths) != set(st.session_state.get("db_paths", [])):
+                            logger.info(f"Database list changed: {len(st.session_state.get('db_paths', []))} → {len(current_db_paths)}")
+                            st.session_state.db_paths = current_db_paths
+                            
+                            # Переинициализируем сервис с новым списком баз данных
+                            st.session_state.service.db_paths = current_db_paths
+                            if st.session_state.service._pipeline:
+                                st.session_state.service._pipeline.db_paths = current_db_paths
+                        
+                        # Переиндексация с обновленным списком
                         st.session_state.service.index_databases(force_reindex=True)
-                    st.success("✅ Переиндексировано")
-                    st.rerun()
+                        
+                        # 🔥 Перезагружаем страницу для обновления Vector DB клиента
+                        st.success(f"✅ Переиндексировано ({len(current_db_paths)} БД)")
+                        st.info("🔄 Перезагрузка страницы для применения изменений...")
+                        st.rerun()
 
         with col2:
             if st.button("🗑️ Кэш", use_container_width=True):

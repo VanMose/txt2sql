@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 
 # Настройки страницы
 st.set_page_config(
-    page_title="Text-to-SQL v2.0 | Production Pipeline",
+    page_title="Text-to-SQL v0.1.1 | Production Pipeline",
     page_icon="🗄️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -179,7 +179,7 @@ def main() -> None:
     """Main application."""
     logger.info("Starting Streamlit app")
 
-    st.title("🗄️ Text-to-SQL v2.0")
+    st.title("🗄️ Text-to-SQL v0.1.1")
     st.markdown(
         """
     **Production система** преобразования естественного языка в SQL:
@@ -293,7 +293,7 @@ def main() -> None:
         )
 
     with col3:
-        st.caption("**v2.0** | Production Pipeline")
+        st.caption("**v0.1.1** | Production Pipeline")
     
     with col4:
         # Pipeline status

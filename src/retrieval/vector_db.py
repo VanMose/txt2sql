@@ -143,17 +143,58 @@ class QdrantVectorDB:
 
     def recreate_collection(self) -> None:
         """Пересоздать коллекцию."""
+        import shutil
+        from pathlib import Path
+        
         try:
-            collections = self.client.get_collections().collections
-            if self.collection_name in [c.name for c in collections]:
-                self.client.delete_collection(collection_name=self.collection_name)
-                logger.info(f"Deleted existing collection '{self.collection_name}'")
-
-            self.client.create_collection(
-                collection_name=self.collection_name,
-                vectors_config=VectorParams(size=self.EMBEDDING_DIM, distance=Distance.COSINE),
-            )
-            logger.info(f"Collection '{self.collection_name}' recreated")
+            # 🔥 Для локального Qdrant - сначала закрываем клиент и удаляем ВСЕ хранилище
+            if self.use_local:
+                # Получаем путь к хранилищу ДО закрытия клиента
+                local_path = None
+                if hasattr(self.client, 'storage_path'):
+                    local_path = Path(self.client.storage_path)
+                elif hasattr(self.client, '_client') and hasattr(self.client._client, 'storage_path'):
+                    local_path = Path(self.client._client.storage_path)
+                else:
+                    local_path = Path("qdrant_storage")
+                
+                # Закрываем текущий клиент (освобождаем lock файл)
+                if hasattr(self.client, 'close'):
+                    self.client.close()
+                
+                # Удаляем ВСЕ хранилище пока клиент закрыт
+                if local_path and local_path.exists():
+                    try:
+                        shutil.rmtree(local_path)
+                        logger.info(f"Deleted local Qdrant storage: {local_path}")
+                    except Exception as e:
+                        logger.warning(f"Could not delete local storage: {e}")
+                
+                # Пересоздаем клиент с чистым хранилищем
+                self.client = QdrantClient(path=str(local_path))
+                logger.info("Recreated Qdrant client with fresh storage")
+                
+                # Создаем новую коллекцию
+                self.client.create_collection(
+                    collection_name=self.collection_name,
+                    vectors_config=VectorParams(size=self.EMBEDDING_DIM, distance=Distance.COSINE),
+                )
+                logger.info(f"Created new collection '{self.collection_name}'")
+            else:
+                # 🔥 Для Docker Qdrant - используем API (без удаления файлов)
+                logger.info(f"Recreating collection in Docker Qdrant at {self.client._client._host}...")
+                
+                collections = self.client.get_collections().collections
+                if self.collection_name in [c.name for c in collections]:
+                    self.client.delete_collection(collection_name=self.collection_name)
+                    logger.info(f"Deleted existing collection '{self.collection_name}' via API")
+                
+                self.client.create_collection(
+                    collection_name=self.collection_name,
+                    vectors_config=VectorParams(size=self.EMBEDDING_DIM, distance=Distance.COSINE),
+                )
+                logger.info(f"Created new collection '{self.collection_name}' in Docker Qdrant")
+                
         except Exception as e:
             logger.error(f"Error recreating collection: {e}")
             raise
