@@ -1,4 +1,4 @@
-# Text-to-SQL Pipeline v0.1.2 - Production Requirements
+# Text-to-SQL Pipeline v0.1.4 - Production Requirements
 # pip install -r requirements.txt
 
 # ===========================================

@@ -425,4 +425,9 @@ embedding_cache = LRUCache(max_size=5000, ttl_seconds=3600)
 search_cache = LRUCache(max_size=1000, ttl_seconds=300)
 
 # Глобальный дисковый кэш для больших схем
-schema_disk_cache = DiskCache(cache_dir="cache/schemas", max_size_mb=50.0)
+from src.config.settings import get_settings
+_settings = get_settings()
+schema_disk_cache = DiskCache(
+    cache_dir=str(Path(_settings.base_dir) / "cache" / "schemas"),
+    max_size_mb=50.0
+)

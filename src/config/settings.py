@@ -177,6 +177,50 @@ class Settings(BaseSettings):
     log_format: str = Field(default="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
     # ===========================================
+    # Additional Agent Settings (NEW)
+    # ===========================================
+
+    # Agent temperatures
+    refiner_temperature: float = Field(default=0.3, ge=0.0, le=2.0, description="Температура для refiner агента")
+    judge_temperature: float = Field(default=0.1, ge=0.0, le=2.0, description="Температура для judge агента")
+    validator_temperature: float = Field(default=0.1, ge=0.0, le=2.0, description="Температура для validator агента")
+
+    # Cache settings
+    router_cache_max_size: int = Field(default=200, ge=1, description="Максимальный размер кэша router агента")
+    reranker_cache_ttl: int = Field(default=300, ge=0, description="TTL кэша reranker в секундах")
+    cache_ttl_seconds: int = Field(default=300, ge=0, description="TTL кэша по умолчанию в секундах")
+
+    # SQL Guardrails
+    sql_default_limit: int = Field(default=1000, ge=1, description="Лимит по умолчанию для SQL запросов")
+    sql_max_limit: int = Field(default=10000, ge=1, description="Максимальный лимит для SQL запросов")
+
+    # Retry settings
+    llm_retry_max_retries: int = Field(default=3, ge=0, description="Максимум попыток для LLM retry")
+    llm_retry_base_delay: float = Field(default=0.5, ge=0.0, description="Базовая задержка для LLM retry")
+    llm_retry_max_delay: float = Field(default=10.0, ge=0.0, description="Максимальная задержка для LLM retry")
+
+    # Confidence cap
+    max_confidence_cap: float = Field(default=0.95, ge=0.0, le=1.0, description="Максимальный cap для confidence")
+
+    # ===========================================
+    # Router Ranking Settings (Hybrid)
+    # ===========================================
+
+    # Режим ранжирования: "vector", "llm", "hybrid"
+    # - vector: только vector score + graph связи (быстро, универсально)
+    # - llm: LLM ranking (медленно, точнее для сложных запросов)
+    # - hybrid: vector для простых, LLM для сложных (баланс)
+    router_ranking_mode: str = Field(default="vector", description="Режим ранжирования БД: vector, llm, hybrid")
+    
+    # Веса для vector ranking
+    vector_score_weight: float = Field(default=0.6, ge=0.0, le=1.0, description="Вес vector similarity score")
+    graph_score_weight: float = Field(default=0.2, ge=0.0, le=1.0, description="Вес graph связей")
+    row_count_weight: float = Field(default=0.2, ge=0.0, le=1.0, description="Вес количества строк в таблицах")
+    
+    # Порог для hybrid режима (если confidence < threshold → используем LLM)
+    hybrid_llm_threshold: float = Field(default=0.5, ge=0.0, le=1.0, description="Порог для переключения на LLM в hybrid режиме")
+
+    # ===========================================
     # Properties
     # ===========================================
 

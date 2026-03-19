@@ -218,7 +218,7 @@ class TransformersService:
     def load_model(
         cls,
         model_path: str,
-        gpu_memory_utilization: float = 0.95,
+        gpu_memory_utilization: Optional[float] = None,
         use_4bit: bool = True,
         use_flash_attention: bool = False,
     ) -> Any:
@@ -234,6 +234,12 @@ class TransformersService:
         Returns:
             Модель.
         """
+        from src.config.settings import get_settings
+        settings = get_settings()
+        
+        if gpu_memory_utilization is None:
+            gpu_memory_utilization = settings.gpu_memory_utilization
+        
         # Ограничение памяти GPU (если возможно)
         if torch.cuda.is_available() and gpu_memory_utilization < 1.0:
             total_memory = torch.cuda.get_device_properties(0).total_memory
@@ -252,8 +258,8 @@ class TransformersService:
     def generate(
         cls,
         prompts: List[str],
-        max_tokens: int = 256,
-        temperature: float = 0.7,
+        max_tokens: Optional[int] = None,
+        temperature: Optional[float] = None,
         n: int = 1
     ) -> List[str]:
         """
@@ -268,6 +274,14 @@ class TransformersService:
         Returns:
             Список сгенерированных текстов.
         """
+        from src.config.settings import get_settings
+        settings = get_settings()
+        
+        if max_tokens is None:
+            max_tokens = settings.max_tokens
+        if temperature is None:
+            temperature = settings.temperature
+        
         model, tokenizer, device = cls.get_model()
         all_outputs: List[str] = []
 

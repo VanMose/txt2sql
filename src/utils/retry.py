@@ -267,11 +267,13 @@ class RetryExecutor:
 
 
 # Глобальный executor для LLM запросов
+from src.config.settings import get_settings
+_settings = get_settings()
 llm_retry_executor = RetryExecutor(
     RetryConfig(
-        max_retries=3,
-        base_delay=0.5,
-        max_delay=10.0,
+        max_retries=_settings.llm_retry_max_retries,
+        base_delay=_settings.llm_retry_base_delay,
+        max_delay=_settings.llm_retry_max_delay,
         jitter=True,
     )
 )

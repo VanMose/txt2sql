@@ -1,4 +1,4 @@
-# 🗄️ Text-to-SQL Pipeline v0.1.2
+# 🗄️ Text-to-SQL Pipeline v0.1.4
 
 **Natural language → SQL** with Hybrid RAG, Graph reasoning, and Ollama LLM.
 

@@ -26,12 +26,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from ..llm.inference import LLMService
-from ..llm.llm_cache import SemanticCache
-from ..llm.prompts import Prompts
-from ..retrieval.graph_db import Neo4jGraphDB
-from ..retrieval.vector_db import QdrantVectorDB, TableDocument
-from ..utils.json_parser import parse_json
+from src.llm.inference import LLMService
+from src.llm.llm_cache import SemanticCache
+from src.llm.prompts import Prompts
+from src.retrieval.graph_db import Neo4jGraphDB
+from src.retrieval.vector_db import QdrantVectorDB, TableDocument
+from src.utils.json_parser import parse_json
 
 logger = logging.getLogger(__name__)
 
@@ -100,9 +100,12 @@ class RouterAgent:
         self.graph_db = graph_db
         self.llm = llm or LLMService()
 
-        self._cache: Dict[str, List[DatabaseSelection]] = {}
-        self._cache_max_size = 200
+        from src.config.settings import get_settings
+        settings = get_settings()
         
+        self._cache: Dict[str, List[DatabaseSelection]] = {}
+        self._cache_max_size = settings.router_cache_max_size
+
         # Semantic cache
         self._use_semantic_cache = use_semantic_cache
         self._semantic_cache = SemanticCache() if use_semantic_cache else None
@@ -124,24 +127,6 @@ class RouterAgent:
         key = f"{query}:{top_k_dbs}:{top_k_tables}"
         return hashlib.md5(key.encode()).hexdigest()
 
-    def _is_simple_query(self, query: str) -> bool:
-        """
-        Проверить, является ли запрос простым.
-
-        Простые запросы могут использовать только heuristic ranking без LLM.
-        """
-        simple_patterns = [
-            "show all", "показать все", "покажи все", "select all",
-            "count", "количество",
-            "list all", "список всех",
-            # 🔥 Добавлено: запросы с ключевыми словами типа данных
-            "фильм", "кино", "movies", "film",
-            "музык", "песн", "artist", "song", "album",
-            "рейтинг", "rating",
-        ]
-        query_lower = query.lower()
-        return any(pattern in query_lower for pattern in simple_patterns)
-
     def route(
         self,
         query: str,
@@ -161,6 +146,9 @@ class RouterAgent:
         Returns:
             Список выбранных баз данных.
         """
+        from src.config.settings import get_settings
+        settings = get_settings()
+        
         start_time = time.time()
         cache_key = self._generate_cache_key(query, top_k_dbs, top_k_tables)
 
@@ -183,7 +171,7 @@ class RouterAgent:
         #         # Если не нашли в кэше, продолжаем без кэша
         #         logger.warning(f"Semantic cache returned {cached_result} but not found in router cache")
 
-        logger.info(f"🔍 Routing query: '{query[:100]}...' (use_llm_ranking={use_llm_ranking}, is_simple={self._is_simple_query(query)})")
+        logger.info(f"🔍 Routing query: '{query[:100]}...' (ranking_mode={settings.router_ranking_mode})")
 
         # Шаг 1: Vector search
         vector_results = self._vector_search(query, top_k_tables)
@@ -209,13 +197,25 @@ class RouterAgent:
             graph_enriched = self._enrich_with_graph(db_groups)
             prefetched_schemas = {}
 
-        # Шаг 4: LLM ranking или heuristic
-        use_heuristic = not use_llm_ranking or self._is_simple_query(query)
-        if use_heuristic:
-            logger.debug("Using heuristic ranking (simple query or disabled)")
-            selections = self._heuristic_ranking(query, graph_enriched, top_k_dbs)
-        else:
+        # Шаг 4: Ranking согласно режиму
+        ranking_mode = settings.router_ranking_mode
+        
+        if ranking_mode == "llm":
+            # LLM ranking (медленно, точно)
+            logger.debug("Using LLM ranking")
             selections = self._llm_ranking(query, graph_enriched, top_k_dbs)
+        elif ranking_mode == "hybrid":
+            # Hybrid: vector + LLM fallback
+            selections = self._vector_ranking(query, graph_enriched, top_k_dbs)
+            # Если confidence низкий → используем LLM
+            avg_conf = sum(s.confidence for s in selections) / len(selections) if selections else 0
+            if avg_conf < settings.hybrid_llm_threshold:
+                logger.debug(f"Hybrid: avg confidence {avg_conf:.2f} < threshold, using LLM ranking")
+                selections = self._llm_ranking(query, graph_enriched, top_k_dbs)
+        else:
+            # Vector ranking (быстро, универсально) - режим по умолчанию
+            logger.debug("Using vector ranking")
+            selections = self._vector_ranking(query, graph_enriched, top_k_dbs)
 
         # Добавляем флаг prefetch к результатам
         for selection in selections:
@@ -435,6 +435,71 @@ class RouterAgent:
 
         return enriched
 
+    def _vector_ranking(
+        self,
+        query: str,
+        db_groups: List[Dict[str, Any]],
+        top_k: int,
+    ) -> List[DatabaseSelection]:
+        """
+        Vector-based ранжирование без keyword эвристик.
+        
+        Использует комбинацию:
+        1. Vector similarity score (из embedding)
+        2. Graph связи (количество relations между таблицами)
+        3. Row count (количество данных в таблицах)
+        
+        Универсальный подход - работает для любых доменов без настройки.
+        """
+        from src.config.settings import get_settings
+        settings = get_settings()
+        
+        scored: List[Tuple[Dict[str, Any], float, str]] = []
+
+        for group in db_groups:
+            # Нормализованные scores (0-1)
+            vector_score = group.get("avg_score", 0.0)
+            graph_score = min(group.get("join_complexity", 0) * 0.1, 1.0)
+            row_score = min(group.get("total_row_count", 0) / 1000, 1.0)
+            
+            # Взвешенная комбинация
+            final_score = (
+                vector_score * settings.vector_score_weight +
+                graph_score * settings.graph_score_weight +
+                row_score * settings.row_count_weight
+            )
+            
+            # Формируем reason
+            reasons = []
+            if vector_score > 0.7:
+                reasons.append(f"high vector similarity ({vector_score:.2f})")
+            if group.get("has_relations"):
+                reasons.append("has table relations")
+            if group.get("join_complexity", 0) > 0:
+                reasons.append(f"{group['join_complexity']} join paths")
+            if group.get("total_row_count", 0) > 100:
+                reasons.append(f"{group['total_row_count']} rows")
+            
+            reason = ", ".join(reasons) if reasons else "default selection"
+            scored.append((group, final_score, reason))
+
+        # Сортировка по убыванию score
+        scored.sort(key=lambda x: x[1], reverse=True)
+
+        selections: List[DatabaseSelection] = []
+        for group, score, reason in scored[:top_k]:
+            selections.append(DatabaseSelection(
+                db_name=group["db_name"],
+                db_path=group["db_path"],
+                relevance_score=score,
+                reason=reason,
+                tables=group["tables"],
+                confidence=min(score, settings.max_confidence_cap),
+            ))
+
+        logger.info(f"Vector ranking: selected {[s.db_name for s in selections]} with scores {[f'{s.relevance_score:.3f}' for s in selections]}")
+        return selections
+
     def _llm_ranking(
         self,
         query: str,
@@ -496,125 +561,6 @@ class RouterAgent:
                 confidence=db.get("confidence", 0.0),
             ))
 
-        return selections
-
-    def _heuristic_ranking(
-        self,
-        query: str,
-        db_groups: List[Dict[str, Any]],
-        top_k: int,
-    ) -> List[DatabaseSelection]:
-        """
-        Эвристическое ранжирование с keyword matching.
-
-        Для простых запросов типа "покажи все фильмы" выбирает БД по названию таблиц.
-        """
-        query_lower = query.lower()
-        
-        # Ключевые слова для определения типа данных (расширенный список)
-        keyword_db_map = {
-            # Фильмы
-            'фильм': ['movie', 'film', 'rating', 'reviewer', 'director', 'actor'],
-            'кино': ['movie', 'film'],
-            'movies': ['movie', 'film'],
-            'film': ['movie', 'film'],
-            'режисс': ['director', 'movie'],
-            'актер': ['actor', 'movie'],
-            'rating': ['rating', 'movie', 'reviewer'],
-            'рейтинг': ['rating', 'movie'],
-            # Музыка
-            'музык': ['music', 'song', 'artist', 'album', 'track'],
-            'песн': ['song', 'track', 'music'],
-            'artist': ['artist', 'music'],
-            'song': ['song', 'music'],
-            'album': ['album', 'music'],
-            'альбом': ['album', 'music'],
-            'трек': ['track', 'music'],
-            # Общие
-            'все': None,  # Любая БД
-            'show all': None,
-            'показать все': None,
-            'покажи все': None,
-        }
-        
-        # Определяем целевые таблицы по ключевым словам
-        target_tables = set()
-        for keyword, tables in keyword_db_map.items():
-            if keyword in query_lower:
-                if tables:
-                    target_tables.update(tables)
-                else:
-                    # Общий запрос - используем первую БД
-                    pass
-                break
-        
-        logger.info(f"Heuristic ranking: query='{query_lower[:50]}', target_tables={target_tables}")
-
-        scored: List[Tuple[Dict[str, Any], float, str]] = []
-
-        for group in db_groups:
-            score = group["avg_score"]
-
-            # Бонус за количество таблиц
-            score += min(group["table_count"] * 0.05, 0.2)
-
-            # Бонус за связи
-            if group.get("has_relations"):
-                score += 0.1
-            score += min(group.get("join_complexity", 0) * 0.03, 0.15)
-            score += group["max_score"] * 0.1
-
-            # 🔥 Бонус за количество строк в таблицах (данные есть!)
-            total_rows = group.get("total_row_count", 0)
-            if total_rows > 0:
-                score += min(total_rows / 100, 0.5)  # +0.5 max за 50+ строк
-                logger.debug(f"DB {group['db_name']}: {total_rows} rows → +{min(total_rows / 100, 0.5):.2f} score")
-
-            # 🔥 Критическое исправление: бонус за совпадение таблиц с ключевыми словами
-            if target_tables:
-                for table_name in group["tables"]:
-                    table_lower = table_name.lower()
-                    for target in target_tables:
-                        # Exact match (case-insensitive) - высший бонус
-                        if target == table_lower:
-                            score += 2.0  # 🔥 Exact match!
-                            logger.info(f"🎯 EXACT match: '{target}' == '{table_name}' (db={group['db_name']})")
-                            break
-                        # Partial match - стандартный бонус
-                        elif target in table_lower or table_lower in target:
-                            score += 0.5  # 🔥 Partial match
-                            logger.info(f"🎯 Partial match: '{target}' in '{table_name}' (db={group['db_name']})")
-                            break
-
-            reasons = []
-            if group["table_count"] > 1:
-                reasons.append(f"{group['table_count']} tables matched")
-            if group.get("has_relations"):
-                reasons.append("has table relations")
-            if group.get("join_complexity", 0) > 0:
-                reasons.append(f"{group['join_complexity']} join paths found")
-            if target_tables and score > 1.0:
-                reasons.append("keyword match")
-            if total_rows > 0:
-                reasons.append(f"{total_rows} rows in tables")
-
-            scored.append((group, score, "; ".join(reasons) or "semantic match"))
-
-        # Сортировка по убыванию score
-        scored.sort(key=lambda x: x[1], reverse=True)
-
-        selections: List[DatabaseSelection] = []
-        for group, score, reason in scored[:top_k]:
-            selections.append(DatabaseSelection(
-                db_name=group["db_name"],
-                db_path=group["db_path"],
-                relevance_score=score,
-                reason=reason,
-                tables=group["tables"],
-                confidence=min(score, 0.95),
-            ))
-
-        logger.info(f"Heuristic ranking: selected {[s.db_name for s in selections]} with scores {[s.relevance_score for s in selections]}")
         return selections
 
     def get_schema_for_selection(self, selections: List[DatabaseSelection]) -> str:

@@ -7,12 +7,14 @@ Ollama сервис для генерации текста.
 
 Использование:
     from llm.ollama_service import OllamaService
-    
+
     service = OllamaService(model="qwen2.5-coder:1.5b")
     texts = service.generate("SELECT * FROM users", n=3)
 """
 import logging
 from typing import Any, Dict, List, Optional
+
+from src.config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -20,43 +22,44 @@ logger = logging.getLogger(__name__)
 class OllamaService:
     """
     Сервис для генерации текста через Ollama API.
-    
+
     Features:
     - Быстрая генерация (llama.cpp backend)
     - Низкое потребление памяти
     - Поддержка CPU и GPU
     - Встроенная квантизация (GGUF format)
-    
+
     Attributes:
         model_name: Имя модели в Ollama.
         base_url: URL Ollama сервера.
         timeout: Таймаут запроса в секундах.
     """
-    
+
     def __init__(
         self,
-        model_name: str = "qwen2.5-coder:1.5b",
-        base_url: str = "http://localhost:11434",
+        model_name: Optional[str] = None,
+        base_url: Optional[str] = None,
         timeout: int = 120,
     ) -> None:
         """
         Инициализировать сервис.
-        
+
         Args:
             model_name: Имя модели (должна быть установлена в Ollama).
             base_url: URL Ollama сервера.
             timeout: Таймаут запроса.
         """
-        self.model_name = model_name
-        self.base_url = base_url
+        settings = get_settings()
+        self.model_name = model_name or settings.llm_model
+        self.base_url = base_url or settings.ollama_base_url
         self.timeout = timeout
-        
+
         # Проверяем доступность Ollama
         self._check_ollama()
-        
+
         logger.info(
-            f"OllamaService initialized: model={model_name}, "
-            f"url={base_url}"
+            f"OllamaService initialized: model={self.model_name}, "
+            f"url={self.base_url}"
         )
     
     def _check_ollama(self) -> None:
@@ -76,26 +79,33 @@ class OllamaService:
         self,
         prompt: str,
         n: int = 1,
-        temperature: float = 0.7,
-        max_tokens: int = 256,
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None,
     ) -> List[str]:
         """
         Сгенерировать текст.
-        
+
         Args:
             prompt: Входной промпт.
             n: Количество сэмплов.
             temperature: Температура генерации.
             max_tokens: Максимум токенов.
-            
+
         Returns:
             Список сгенерированных текстов.
         """
         import ollama
-        
+
+        from src.config.settings import get_settings
+        settings = get_settings()
+        if temperature is None:
+            temperature = settings.temperature
+        if max_tokens is None:
+            max_tokens = settings.max_tokens
+
         results = []
         client = ollama.Client(host=self.base_url)
-        
+
         for i in range(n):
             try:
                 response = client.generate(
@@ -108,29 +118,29 @@ class OllamaService:
                     },
                 )
                 results.append(response['response'])
-                
+
             except Exception as e:
                 logger.error(f"Ollama generation error: {e}")
                 results.append("")
-        
+
         return results
-    
+
     def generate_batch(
         self,
         prompts: List[str],
         n: int = 1,
-        temperature: float = 0.7,
-        max_tokens: int = 256,
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None,
     ) -> List[List[str]]:
         """
         Batch генерация.
-        
+
         Args:
             prompts: Список промптов.
             n: Количество сэмплов на промпт.
             temperature: Температура.
             max_tokens: Максимум токенов.
-            
+
         Returns:
             Список списков текстов.
         """

@@ -50,8 +50,8 @@ class SQLGenerator:
         self,
         query: str,
         schema: str,
-        n_samples: int = 5,
-        temperature: float = 0.7,
+        n_samples: Optional[int] = None,
+        temperature: Optional[float] = None,
         use_batch: bool = True,
         early_stop: bool = True,
     ) -> List[str]:
@@ -69,6 +69,14 @@ class SQLGenerator:
         Returns:
             Список SQL запросов.
         """
+        from src.config.settings import get_settings
+        settings = get_settings()
+        
+        if n_samples is None:
+            n_samples = settings.n_samples
+        if temperature is None:
+            temperature = settings.temperature
+        
         start_time = time.time()
         self.stats["total_generations"] += 1
 

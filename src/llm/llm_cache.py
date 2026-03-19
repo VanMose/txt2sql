@@ -56,7 +56,9 @@ class LLMCache:
             max_size: Максимальное количество записей.
         """
         if cache_dir is None:
-            cache_dir = Path(__file__).parent.parent / "cache"
+            from src.config.settings import get_settings
+            settings = get_settings()
+            cache_dir = Path(settings.base_dir) / "cache"
 
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(exist_ok=True)
@@ -216,7 +218,7 @@ class SemanticCache:
     def __init__(
         self,
         cache_dir: Optional[str] = None,
-        threshold: float = 0.95,
+        threshold: Optional[float] = None,
         max_size: int = 5000
     ) -> None:
         """
@@ -227,8 +229,13 @@ class SemanticCache:
             threshold: Порог cosine similarity.
             max_size: Максимальное количество записей.
         """
+        from src.config.settings import get_settings
+        settings = get_settings()
+        
         if cache_dir is None:
-            cache_dir = Path(__file__).parent.parent / "cache"
+            cache_dir = Path(settings.base_dir) / "cache"
+        if threshold is None:
+            threshold = settings.semantic_cache_threshold
 
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(exist_ok=True)
@@ -257,8 +264,10 @@ class SemanticCache:
         if self._embedder is None:
             try:
                 from sentence_transformers import SentenceTransformer
-                self._embedder = SentenceTransformer('all-MiniLM-L6-v2')
-                logger.info("SemanticCache: SentenceTransformer loaded")
+                from src.config.settings import get_settings
+                settings = get_settings()
+                self._embedder = SentenceTransformer(settings.embedding_model)
+                logger.info(f"SemanticCache: SentenceTransformer loaded '{settings.embedding_model}'")
             except ImportError:
                 logger.warning("SemanticCache: sentence-transformers not available, using exact match only")
                 self._embedder = None

@@ -53,21 +53,23 @@ class SQLRefiner:
         },
     }
 
-    def __init__(self, max_retries: int = 3) -> None:
+    def __init__(self, max_retries: Optional[int] = None) -> None:
         """
         Инициализировать рефайнер.
 
         Args:
             max_retries: Максимум попыток refinement.
         """
+        from src.config.settings import get_settings
+        settings = get_settings()
         self.llm = LLMService()
-        self.max_retries = max_retries
-        
+        self.max_retries = max_retries if max_retries is not None else settings.max_retries
+
         # KV Cache для промптов
         self._kv_cache: Dict[str, Any] = {}
         self._cache_hits = 0
         self._cache_misses = 0
-        
+
         # Статистика
         self.stats = {
             "total_refinements": 0,
@@ -161,9 +163,11 @@ Error:
 
             # Формирование промпта
             prompt = Prompts.format_sql_refiner(query, schema, history)
-            
+
             # Генерация с batch inference (n=2 для выбора лучшего)
-            outputs = self.llm.generate(prompt, n=2, temperature=0.3)
+            from src.config.settings import get_settings
+            settings = get_settings()
+            outputs = self.llm.generate(prompt, n=2, temperature=settings.refiner_temperature)
             
             # Парсинг и выбор лучшего варианта
             refined_sql = self._parse_and_select_best(outputs, best_sql)

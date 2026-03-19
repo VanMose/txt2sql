@@ -11,11 +11,9 @@ import logging
 import re
 from typing import Tuple
 
-logger = logging.getLogger(__name__)
+from src.config.settings import get_settings
 
-# Максимальное количество строк по умолчанию
-DEFAULT_LIMIT = 1000
-MAX_LIMIT = 10000
+logger = logging.getLogger(__name__)
 
 
 class SQLGuardrails:
@@ -87,6 +85,8 @@ class SQLGuardrails:
     @classmethod
     def _ensure_limit(cls, sql: str) -> str:
         """Добавить LIMIT если отсутствует."""
+        from src.config.settings import get_settings
+        settings = get_settings()
         sql_upper = sql.upper()
 
         # Не добавляем LIMIT к агрегатным запросам (COUNT, SUM, AVG, MAX, MIN)
@@ -99,20 +99,20 @@ class SQLGuardrails:
 
         # Проверяем наличие LIMIT
         if "LIMIT" not in sql_upper:
-            sql = f"{sql} LIMIT {DEFAULT_LIMIT}"
-            logger.info(f"Auto-added LIMIT {DEFAULT_LIMIT}")
+            sql = f"{sql} LIMIT {settings.sql_default_limit}"
+            logger.info(f"Auto-added LIMIT {settings.sql_default_limit}")
         else:
             # Проверяем что LIMIT не слишком большой
             match = re.search(r"LIMIT\s+(\d+)", sql_upper)
             if match:
                 limit_val = int(match.group(1))
-                if limit_val > MAX_LIMIT:
+                if limit_val > settings.sql_max_limit:
                     sql = re.sub(
                         r"LIMIT\s+\d+",
-                        f"LIMIT {MAX_LIMIT}",
+                        f"LIMIT {settings.sql_max_limit}",
                         sql,
                         flags=re.IGNORECASE,
                     )
-                    logger.warning(f"Reduced LIMIT from {limit_val} to {MAX_LIMIT}")
+                    logger.warning(f"Reduced LIMIT from {limit_val} to {settings.sql_max_limit}")
 
         return sql
