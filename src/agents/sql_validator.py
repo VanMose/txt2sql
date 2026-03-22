@@ -3,18 +3,28 @@
 SQL Validator Agent для валидации сгенерированного SQL.
 
 Production features:
+- SQL Guardrails integration (SELECT-only, auto-LIMIT, SQL injection protection)
 - Syntax validation
 - Table/column existence check
 - JOIN validation
 - Error detection and suggestions
 
 Pipeline:
-    SQL → Syntax Check → Schema Check → JOIN Check → Valid/Invalid
+    SQL → Guardrails → Syntax Check → Schema Check → JOIN Check → Valid/Invalid
 """
 import logging
 import re
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Set, Tuple
+
+from ..db.guardrails import SQLGuardrails
+from ..utils.sql_parser import (
+    extract_tables,
+    extract_columns,
+    has_join,
+    has_aggregate,
+    extract_join_tables,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -221,6 +221,43 @@ class Settings(BaseSettings):
     hybrid_llm_threshold: float = Field(default=0.5, ge=0.0, le=1.0, description="Порог для переключения на LLM в hybrid режиме")
 
     # ===========================================
+    # Prompt Version Settings
+    # ===========================================
+
+    # Prompt versions for each agent
+    router_prompt_version: str = Field(default="v2", description="Версия промпта для Router Agent")
+    sql_generator_prompt_version: str = Field(default="v2", description="Версия промпта для SQL Generator")
+    sql_judge_prompt_version: str = Field(default="v2", description="Версия промпта для SQL Judge")
+    sql_refiner_prompt_version: str = Field(default="v2", description="Версия промпта для SQL Refiner")
+
+    # Database description settings
+    db_description_language: str = Field(default="en", description="Язык описаний баз данных (en/ru)")
+    db_description_version: str = Field(default="v1", description="Версия описаний баз данных")
+
+    # ===========================================
+    # Production Scaling Settings (1000+ DBs)
+    # ===========================================
+
+    # Query Result Caching
+    use_result_cache: bool = Field(default=True, description="Кэшировать результаты запросов")
+    result_cache_max_size: int = Field(default=5000, ge=1, description="Максимальный размер кэша результатов")
+    result_cache_ttl_seconds: int = Field(default=3600, ge=0, description="TTL кэша результатов в секундах")
+
+    # Connection Pooling
+    use_connection_pool: bool = Field(default=True, description="Использовать пул соединений")
+    connection_pool_size: int = Field(default=20, ge=1, description="Размер пула соединений")
+    connection_pool_timeout: int = Field(default=30, ge=1, description="Таймаут ожидания соединения (сек)")
+
+    # Async Execution
+    use_async_execution: bool = Field(default=True, description="Использовать асинхронное выполнение")
+    max_workers: int = Field(default=8, ge=1, le=32, description="Максимальное количество workers")
+
+    # Vector Search Optimization
+    vector_search_batch_size: int = Field(default=50, ge=10, description="Размер батча для vector search")
+    use_approximate_search: bool = Field(default=True, description="Использовать approximate nearest neighbor search")
+    hnsw_ef: int = Field(default=128, ge=64, le=512, description="HNSW ef parameter for search")
+
+    # ===========================================
     # Properties
     # ===========================================
 

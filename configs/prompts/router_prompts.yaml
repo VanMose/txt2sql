@@ -1,0 +1,129 @@
+# Router Agent Prompts
+# Version: Select via settings.router_prompt_version
+# 
+# DESIGN PRINCIPLES:
+# - Database-agnostic: Works with ANY database schema
+# - No hardcoded table/database names
+# - Universal routing logic based on semantics
+# - Clear output format specification
+
+v1:
+  description: "Basic router with database ranking - Universal"
+  template: |
+    You are a database router for a multi-database text-to-SQL system.
+
+    ## Task
+    Select the most relevant databases to answer the user's question based on semantic matching.
+
+    ## Available Databases
+    {databases_info}
+
+    ## Instructions
+    1. Analyze the user's question to understand what information they seek
+    2. Review each database and its tables carefully
+    3. Match query semantics to table purposes (not just keywords)
+    4. Rank databases from most to least relevant
+    5. Assign confidence scores (0.0-1.0) based on relevance certainty
+    6. Return ONLY valid JSON without any extra text
+
+    ## Question
+    {query}
+
+    ## Output Format
+    Return a JSON object with this exact structure:
+    {{
+      "ranked_databases": [
+        {{
+          "db_name": "exact_database_name_from_list",
+          "tables": ["relevant_table1", "relevant_table2"],
+          "confidence": 0.9,
+          "reason": "brief explanation of semantic relevance"
+        }}
+      ]
+    }}
+
+    ## Critical Rules
+    - Return ONLY the JSON object (no markdown, no explanations)
+    - Use EXACT database names as shown (case-sensitive)
+    - Use EXACT table names as listed under each database
+    - Do NOT invent table names that don't exist in the list
+    - Confidence must be between 0.0 and 1.0
+    - Ensure all JSON strings use double quotes
+
+    ## Your Selection (JSON only):
+
+v2:
+  description: "Enhanced router with semantic understanding - Universal"
+  template: |
+    You are an expert database router for a multi-database text-to-SQL system.
+    Your goal is to identify which databases contain tables relevant to the user's query.
+
+    ## Task
+    Analyze the user's question and select databases that can answer it.
+
+    ## Available Databases
+    {databases_info}
+
+    ## Analysis Steps
+    1. **Understand query intent**: What type of information is the user seeking?
+    2. **Identify key concepts**: Extract main entities and relationships from the query
+    3. **Match to tables**: Find tables whose purpose aligns with the query concepts
+    4. **Rank by relevance**: Order databases by semantic match quality
+
+    ## Question
+    {query}
+
+    ## Output Format
+    {{
+      "ranked_databases": [
+        {{
+          "db_name": "string - exact database name from the list",
+          "tables": ["array", "of", "relevant", "table", "names"],
+          "confidence": 0.0-1.0,
+          "reason": "string - explain semantic match between query and tables"
+        }}
+      ],
+      "query_analysis": {{
+        "intent": "string - what type of information is requested (e.g., retrieval, aggregation, comparison)",
+        "keywords": ["array", "of", "key", "concepts", "from", "query"]
+      }}
+    }}
+
+    ## CRITICAL RULES - READ CAREFULLY
+
+    ### Rule 1: Use ONLY Tables From The List
+    - You MUST select tables from the "Tables:" line for each database
+    - DO NOT invent table names that are not explicitly listed
+    - DO NOT assume tables exist beyond what is shown
+
+    ### Rule 2: Exact Database Names Required
+    - Use EXACT database names as shown (case-sensitive)
+    - Example: "music_1" NOT "Music" or "music1" or "MusicDB"
+
+    ### Rule 3: Table Names Must Match Exactly
+    - If database shows "Tables: song, artist" → you can ONLY use "song" or "artist"
+    - If database shows "Tables: volume, festival" → you CANNOT use "song" (it doesn't exist in that database!)
+    - Table names are case-sensitive
+
+    ### Rule 4: Return ONLY Valid JSON
+    - No markdown code blocks (no ```)
+    - No explanations before or after the JSON
+    - Ensure proper JSON syntax (commas, quotes, brackets)
+
+    ### Rule 5: Semantic Matching Over Keyword Matching
+    - Match query intent to table purpose, not just keywords
+    - Example: "Show me tracks" → match to table with songs/music, not just tables containing word "track"
+
+    ## Example of CORRECT Selection:
+    If Available Databases shows:
+      Database: music_db, Tables: song, artist, album
+      Database: concert_db, Tables: venue, event, ticket
+
+    For query "Find all songs by artist X":
+    CORRECT: {{"db_name": "music_db", "tables": ["song", "artist"], ...}}
+    WRONG: {{"db_name": "concert_db", "tables": ["venue"], ...}}
+
+    ## Your Response (JSON only, no markdown):
+
+# Default version to use
+default_version: "v2"

@@ -138,14 +138,15 @@ class Neo4jGraphDB:
     def add_schema_batch(self, db_name: str, tables: List[Dict[str, Any]]) -> int:
         """
         Добавить схему базы данных батчем.
-        
+
         FIX: Column nodes уникальны по (db_name, table_name, name)
         FIX: Foreign keys обрабатываются для каждой таблицы
-        
+        FIX: Убран MATCH перед MERGE для Column (причина ConstraintError)
+
         Args:
             db_name: Имя базы данных.
             tables: Список таблиц с колонками и FK.
-        
+
         Returns:
             Количество созданных узлов.
         """
@@ -156,7 +157,7 @@ class Neo4jGraphDB:
             with session.begin_transaction() as tx:
                 nodes_count = 0
 
-                # Создаём узел Database
+                # 🔥 FIX: Создаём узел Database через MERGE (без MATCH)
                 tx.run(
                     "MERGE (d:Database {name: $db_name}) SET d.updated_at = datetime()",
                     db_name=db_name,
@@ -167,16 +168,18 @@ class Neo4jGraphDB:
                 for table in tables:
                     column_types_json = json.dumps(table.get("column_types", {})) if table.get("column_types") else None
 
-                    # Создаём узел Table (уникален по db_name + name)
+                    # 🔥 FIX: Создаём узел Table через MERGE (без MATCH)
+                    # Table уникален по db_name + name (constraint)
                     tx.run(
                         """
-                        MATCH (d:Database {name: $db_name})
                         MERGE (t:Table {db_name: $db_name, name: $table_name})
-                        SET t.columns = $columns, 
+                        SET t.columns = $columns,
                             t.column_types = $column_types,
-                            t.primary_key = $primary_key, 
+                            t.primary_key = $primary_key,
                             t.row_count = $row_count,
                             t.updated_at = datetime()
+                        WITH t
+                        MATCH (d:Database {name: $db_name})
                         MERGE (d)-[:HAS_TABLE]->(t)
                         """,
                         db_name=db_name,
@@ -188,17 +191,20 @@ class Neo4jGraphDB:
                     )
                     nodes_count += 1
 
-                    # FIX: Создаём Column nodes с db_name для уникальности
+                    # 🔥 FIX: Создаём Column nodes через MERGE (без MATCH!)
+                    # Column уникален по db_name + table_name + name (constraint)
+                    # MERGE сам найдёт существующий узел или создаст новый
                     for col_name, col_type in table.get("column_types", {}).items():
                         tx.run(
                             """
-                            MATCH (t:Table {db_name: $db_name, name: $table_name})
                             MERGE (c:Column {
                                 db_name: $db_name,
-                                table_name: $table_name, 
+                                table_name: $table_name,
                                 name: $column_name
                             })
                             SET c.type = $column_type, c.updated_at = datetime()
+                            WITH c
+                            MATCH (t:Table {db_name: $db_name, name: $table_name})
                             MERGE (t)-[:HAS_COLUMN]->(c)
                             """,
                             db_name=db_name,
@@ -213,10 +219,10 @@ class Neo4jGraphDB:
                     for fk in table.get("foreign_keys", []):
                         tx.run(
                             """
-                            MATCH (from_t:Table {db_name: $db_name, name: $from_table})
-                            MATCH (to_t:Table {db_name: $db_name, name: $to_table})
+                            MERGE (from_t:Table {db_name: $db_name, name: $from_table})
+                            MERGE (to_t:Table {db_name: $db_name, name: $to_table})
                             MERGE (from_t)-[r:FOREIGN_KEY {
-                                from_column: $from_column, 
+                                from_column: $from_column,
                                 to_column: $to_column
                             }]->(to_t)
                             """,
@@ -447,12 +453,46 @@ class Neo4jGraphDB:
             return tables
 
     def delete_all(self) -> int:
-        """Удалить все узлы и связи из графа."""
+        """
+        Удалить все узлы и связи из графа.
+        
+        🔥 FIX: Сначала удаляем constraints, потом узлы, потом воссоздаём constraints
+        """
         with self._driver.session(database=self.database) as session:
+            # 🔥 Шаг 1: Удаляем все constraints
+            logger.info("Dropping Neo4j constraints...")
+            constraints_result = session.run("SHOW CONSTRAINTS")
+            constraints = list(constraints_result)
+            
+            for constraint in constraints:
+                constraint_name = constraint.get('name')
+                if constraint_name:
+                    session.run(f"DROP CONSTRAINT {constraint_name}")
+                    logger.debug(f"Dropped constraint: {constraint_name}")
+            
+            # 🔥 Шаг 2: Удаляем все узлы и связи
+            logger.info("Deleting all nodes and relationships...")
             result = session.run("MATCH (n) DETACH DELETE n RETURN count(*) AS deleted")
             record = result.single()
             deleted = record["deleted"] if record else 0
-            logger.info(f"Deleted all nodes from Graph DB: {deleted} nodes")
+            logger.info(f"Deleted {deleted} nodes from Graph DB")
+            
+            # 🔥 Шаг 3: Воссоздаём constraints
+            logger.info("Recreating Neo4j constraints...")
+            for constraint in self.CONSTRAINTS:
+                try:
+                    session.run(constraint)
+                except CypherSyntaxError as e:
+                    logger.debug(f"Constraint creation skipped: {e}")
+            
+            # 🔥 Шаг 4: Воссоздаём индексы
+            for index in self.INDEXES:
+                try:
+                    session.run(index)
+                except CypherSyntaxError as e:
+                    logger.debug(f"Index creation skipped: {e}")
+            
+            logger.info(f"Neo4j cleared and constraints recreated. Deleted {deleted} nodes.")
             return deleted
 
     def get_stats(self) -> Dict[str, Any]:

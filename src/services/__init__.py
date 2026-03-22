@@ -1,17 +1,21 @@
 """
-Service слой для Text-to-SQL пайплайна."""
+Service слой для Text-to-SQL пайплайна.
+
+Note: PipelineService is NOT imported here to avoid circular imports.
+Import it directly: from services.pipeline_service import PipelineService
+"""
 from .metrics import metrics, QueryMetrics, QueryStatus, MetricsCollector, get_metrics_summary, record_query_latency
-from .pipeline_service import PipelineService, QueryResult, PipelineStats, DatabaseDiscoveryService
+from .result_cache import ResultCache, get_result_cache
 
 __all__ = [
+    # Metrics
     "metrics",
     "QueryMetrics",
     "QueryStatus",
     "MetricsCollector",
     "get_metrics_summary",
     "record_query_latency",
-    "PipelineService",
-    "QueryResult",
-    "PipelineStats",
-    "DatabaseDiscoveryService",
+    # Result Cache
+    "ResultCache",
+    "get_result_cache",
 ]

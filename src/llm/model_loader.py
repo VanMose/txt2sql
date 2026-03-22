@@ -187,102 +187,6 @@ class MockLLM:
         }, ensure_ascii=False)
 
 
-class PromptCache:
-    """
-    Кэширование префиксов промптов.
-
-    Кэширует общие части промптов (schema, инструкции)
-    для ускорения повторных запросов.
-    """
-
-    def __init__(self, max_size: int = 100) -> None:
-        self.max_size = max_size
-        self._cache: Dict[str, Any] = {}
-        self._access_order: List[str] = []
-        logger.info(f"PromptCache initialized: max_size={max_size}")
-
-    def get(self, key: str) -> Optional[Any]:
-        """Получить значение из кэша."""
-        if key in self._cache:
-            self._access_order.remove(key)
-            self._access_order.append(key)
-            logger.debug(f"PromptCache HIT: {key[:30]}...")
-            return self._cache[key]
-        return None
-
-    def put(self, key: str, value: Any) -> None:
-        """Положить значение в кэш."""
-        if key in self._cache:
-            self._access_order.remove(key)
-        elif len(self._cache) >= self.max_size:
-            oldest = self._access_order.pop(0)
-            del self._cache[oldest]
-
-        self._cache[key] = value
-        self._access_order.append(key)
-        logger.debug(f"PromptCache PUT: {key[:30]}...")
-
-    def clear(self) -> None:
-        """Очистить кэш."""
-        self._cache.clear()
-        self._access_order.clear()
-        logger.info("PromptCache cleared")
-
-
-class OptimizedModel:
-    """
-    Обёртка для оптимизированной модели.
-
-    Применяет:
-    - 4-bit квантизацию
-    - Torch compile
-    - Flash Attention 2
-    """
-
-    def __init__(
-        self,
-        model: Any,
-        use_4bit: bool = True,
-        use_torch_compile: bool = True,
-        use_flash_attention: bool = False,
-    ) -> None:
-        self.model = model
-        self.use_4bit = use_4bit and BITSANDBYTES_AVAILABLE
-        self.use_torch_compile = use_torch_compile
-        self.use_flash_attention = use_flash_attention and FLASH_ATTN_AVAILABLE
-
-        # Применяем оптимизации
-        self._apply_optimizations()
-
-        logger.info(
-            f"OptimizedModel: 4bit={self.use_4bit}, "
-            f"torch_compile={self.use_torch_compile}, "
-            f"flash_attn={self.use_flash_attention}"
-        )
-
-    def _apply_optimizations(self) -> None:
-        """Применить оптимизации к модели."""
-        if not TRANSFORMERS_AVAILABLE:
-            return
-
-        # 4-bit квантизация уже применена при загрузке
-        # Torch compile применяется к forward методу
-        if self.use_torch_compile and hasattr(self.model, 'forward'):
-            try:
-                self.model.forward = torch.compile(self.model.forward, mode="reduce-overhead")
-                logger.info("Torch compile applied to model.forward")
-            except Exception as e:
-                logger.warning(f"Torch compile failed: {e}")
-
-    def generate(self, *args: Any, **kwargs: Any) -> Any:
-        """Генерация через модель."""
-        return self.model.generate(*args, **kwargs)
-
-    def __getattr__(self, name: str) -> Any:
-        """Делегирование атрибутов модели."""
-        return getattr(self.model, name)
-
-
 class ModelLoader:
     """
     Singleton для загрузки LLM модели с оптимизациями.
@@ -297,18 +201,15 @@ class ModelLoader:
     - Torch compile (torch.compile)
     - Flash Attention 2
     - Model warm-up
-    - Prompt caching
 
     Attributes:
         _model: Кэш модели.
         _backend: Текущий backend.
-        _prompt_cache: Кэш промптов.
         _warmed_up: Флаг warm-up.
     """
 
     _model: Optional[Any] = None
     _backend: Optional[LLMBackend] = None
-    _prompt_cache: Optional[PromptCache] = None
     _warmed_up: bool = False
     _current_model_name: Optional[str] = None
 
@@ -381,10 +282,6 @@ class ModelLoader:
                     gpu_memory_utilization=settings.gpu_memory_utilization
                 )
 
-            # Инициализация prompt cache
-            if settings.use_prompt_cache:
-                cls._prompt_cache = PromptCache()
-
         return cls._model
 
     @classmethod
@@ -404,8 +301,6 @@ class ModelLoader:
         if cls._backend == LLMBackend.TRANSFORMERS:
             from .transformers_service import TransformersService
             TransformersService.clear_cache()
-        if cls._prompt_cache:
-            cls._prompt_cache.clear()
         return cls.get_model(model_name, force_backend)
 
     @classmethod
@@ -467,11 +362,6 @@ class ModelLoader:
         except Exception as e:
             logger.warning(f"Model warm-up failed: {e}")
             return False
-
-    @classmethod
-    def get_prompt_cache(cls) -> Optional[PromptCache]:
-        """Получить кэш промптов."""
-        return cls._prompt_cache
 
     @classmethod
     def is_warmed_up(cls) -> bool:

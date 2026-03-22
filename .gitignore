@@ -89,5 +89,7 @@ desktop.ini
 *.onnx
 *.pb
 
-# bat файлы
-run.bat
+
+*main.ipynb
+*analyze_dbs.py 
+*db_analysis.json

@@ -450,13 +450,16 @@ class QdrantVectorDB:
         # Step 2: Cross-encoder reranking
         pairs = [(query, doc.text) for doc, _ in candidates]
         rerank_scores = reranker.compute_score(pairs)
-        
+
         # Combining scores
         reranked = []
         for (doc, _), rerank_score in zip(candidates, rerank_scores):
-            combined_score = 0.6 * rerank_score + 0.4 * doc.foreign_keys is not None
+            # Combined score: 60% reranker, 40% vector + FK boost
+            fk_boost = 1.15 if doc.foreign_keys else 1.0
+            combined_score = (0.6 * rerank_score + 0.4 * 1.0) * fk_boost
             reranked.append((doc, combined_score))
 
+        # Step 3: Sort and return top k
         reranked.sort(key=lambda x: x[1], reverse=True)
         return reranked[:top_k]
 

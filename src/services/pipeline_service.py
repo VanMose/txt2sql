@@ -23,7 +23,7 @@ from typing import Any, Dict, List, Optional
 
 from ..config.settings import get_settings
 from ..db.schema_loader import SchemaLoader
-from ..pipeline.langgraph_pipeline import MultiDBPipeline
+from ..pipeline.pipeline import Text2SQLPipeline
 from ..retrieval.vector_db import TableDocument
 
 logger = logging.getLogger(__name__)
@@ -117,27 +117,50 @@ class PipelineService:
         self.use_local_qdrant = use_local_qdrant
         self.qdrant_local_path = qdrant_local_path or settings.get("qdrant_local_path")
 
-        self._pipeline: Optional[MultiDBPipeline] = None
+        self._pipeline: Optional[Text2SQLPipeline] = None
         self._initialized = False
         self._stats = PipelineStats()
 
         logger.info(f"PipelineService initialized with {len(self.db_paths)} databases")
 
-    def initialize(self, warmup_model: bool = True) -> bool:
+    def initialize(self, warmup_model: bool = True, run_preflight: bool = True) -> bool:
         """
         Инициализировать пайплайн.
 
         Args:
             warmup_model: Прогреть модель при инициализации.
+            run_preflight: Запустить preflight проверки.
 
         Returns:
             True если успешно.
         """
         try:
-            settings = get_settings()
+            # Preflight checks
+            if run_preflight:
+                from .preflight import PreflightChecker
+                logger.info("Running preflight checks...")
+                checker = PreflightChecker(
+                    db_paths=self.db_paths,
+                    use_local_qdrant=self.use_local_qdrant,
+                    qdrant_local_path=self.qdrant_local_path,
+                )
+                checker.run_all_checks()
 
-            self._pipeline = MultiDBPipeline(
-                db_paths=self.db_paths,
+                if checker.has_critical_failures():
+                    logger.error("Preflight checks failed:")
+                    for result in checker.results:
+                        if not result.success:
+                            logger.error(f"  - {result.name}: {result.error}")
+                    checker.print_report()
+                    return False
+
+                logger.info("Preflight checks passed")
+
+            settings = get_settings()
+            logger.info(f"Settings loaded: db_paths={settings.db_paths}")
+
+            self._pipeline = Text2SQLPipeline(
+                db_paths=self.db_paths or settings.db_paths,
                 qdrant_url=settings.qdrant_url if not settings.qdrant_use_local else None,
                 qdrant_api_key=settings.qdrant_api_key,
                 neo4j_uri=settings.neo4j_uri,
@@ -145,10 +168,15 @@ class PipelineService:
                 neo4j_password=settings.neo4j_password,
                 use_local_qdrant=self.use_local_qdrant,
                 qdrant_local_path=self.qdrant_local_path,
+                use_query_understanding=True,
+                use_schema_compression=True,
+                use_parallel_execution=settings.use_parallel_execution,
             )
+            logger.info("Text2SQLPipeline created")
 
             # Проверка Vector DB
             vector_stats = self._pipeline.vector_db.get_stats()
+            logger.info(f"Vector DB stats: {vector_stats}")
             points_count = vector_stats.get("points_count", 0)
 
             if points_count == 0:
@@ -166,7 +194,7 @@ class PipelineService:
             return True
 
         except Exception as e:
-            logger.error(f"Failed to initialize PipelineService: {e}")
+            logger.error(f"Failed to initialize PipelineService: {e}", exc_info=True)
             return False
 
     def _warmup_model(self) -> None:
@@ -205,24 +233,16 @@ class PipelineService:
 
         start_time = time.time()
 
-        self._pipeline.index_databases(force_reindex=force_reindex)
+        result = self._pipeline.index_databases(force_reindex=force_reindex)
 
         elapsed_ms = (time.time() - start_time) * 1000
 
-        # Статистика
-        vector_stats = self._pipeline.vector_db.get_stats()
-        graph_stats = self._pipeline.graph_db.get_stats()
-
-        result = {
-            "elapsed_ms": round(elapsed_ms, 2),
-            "vector_db": vector_stats,
-            "graph_db": graph_stats,
-            "databases_indexed": len(self.db_paths),
-        }
+        # Статистика (result already contains stats from pipeline)
+        result["elapsed_ms"] = round(elapsed_ms, 2)
 
         logger.info(
             f"Indexing completed in {elapsed_ms:.0f}ms: "
-            f"{vector_stats.get('points_count', 0)} tables indexed"
+            f"{result.get('vector_db', {}).get('points_count', 0)} tables indexed"
         )
 
         return result
@@ -251,18 +271,18 @@ class PipelineService:
             self._stats.total_latency_ms += elapsed_ms
 
             # Обновление средней статистики
-            latencies = result.get("latencies", {})
+            latencies = result.latencies
             self._update_avg_latencies(latencies)
 
             return QueryResult(
                 query=query,
-                sql=result.get("best_sql", ""),
-                confidence=result.get("confidence", 0.0),
-                execution_result=result.get("execution_result"),
-                selected_databases=result.get("selected_databases", []),
+                sql=result.sql,
+                confidence=result.confidence,
+                execution_result=result.execution_result,
+                selected_databases=result.selected_databases,
                 latencies=latencies,
-                success=result.get("best_sql") is not None,
-                refinement_count=result.get("refinement_count", 0),
+                success=result.success,
+                refinement_count=result.refinement_count,
             )
 
         except Exception as e:
@@ -315,13 +335,15 @@ class PipelineService:
             return {}
 
         try:
-            return self._pipeline.graph_db.get_stats()
+            stats = self._pipeline.get_stats()
+            return stats.get("graph_db", {})
         except Exception as e:
             logger.warning(f"Graph DB stats not available: {e}")
             return {}
 
     def get_pipeline_stats(self) -> Dict[str, Any]:
         """Получить общую статистику."""
+        stats = self._pipeline.get_stats() if self._pipeline else {}
         return {
             "initialized": self._initialized,
             "databases": len(self.db_paths),
@@ -329,6 +351,7 @@ class PipelineService:
             "queries": self._stats.to_dict(),
             "vector_db": self.get_vector_db_stats(),
             "graph_db": self.get_graph_db_stats(),
+            "pipeline_stats": stats,
         }
 
     def recreate_vector_db_collection(self) -> Dict[str, Any]:

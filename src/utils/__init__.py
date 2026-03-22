@@ -1,9 +1,7 @@
-"""
-Утилиты для Text-to-SQL пайплайна."""
+"""Utilities for Text-to-SQL pipeline."""
 from .json_parser import parse_json, safe_parse_json, extract_json_from_markdown
 from .retry import retry_with_backoff, RetryExecutor, RetryConfig, llm_retry_executor
 from .rate_limiter import RateLimiter, RateLimitExceeded, llm_rate_limiter
-from .optimizations import LRUCache, DiskCache, cached, batched, timed, Timer
 from .sql_parser import (
     extract_tables,
     extract_columns,
@@ -12,6 +10,12 @@ from .sql_parser import (
     is_valid_sql,
     has_dangerous_operations,
     normalize_sql,
+    count_tables,
+    count_columns,
+    has_join,
+    extract_join_tables,
+    has_aggregate,
+    extract_where_columns,
 )
 
 __all__ = [
@@ -28,13 +32,6 @@ __all__ = [
     "RateLimiter",
     "RateLimitExceeded",
     "llm_rate_limiter",
-    # Optimizations
-    "LRUCache",
-    "DiskCache",
-    "cached",
-    "batched",
-    "timed",
-    "Timer",
     # SQL Parser
     "extract_tables",
     "extract_columns",
@@ -43,4 +40,10 @@ __all__ = [
     "is_valid_sql",
     "has_dangerous_operations",
     "normalize_sql",
+    "count_tables",
+    "count_columns",
+    "has_join",
+    "extract_join_tables",
+    "has_aggregate",
+    "extract_where_columns",
 ]

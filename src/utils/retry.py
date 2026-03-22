@@ -98,59 +98,6 @@ def retry_with_backoff(
     return decorator
 
 
-def retry_on_error(
-    func: Callable[..., T],
-    max_retries: int = 3,
-    base_delay: float = 1.0,
-    error_condition: Optional[Callable[[Any], bool]] = None,
-) -> T:
-    """
-    Retry функция с проверкой условия ошибки.
-
-    Args:
-        func: Функция для выполнения.
-        max_retries: Максимум попыток.
-        base_delay: Базовая задержка.
-        error_condition: Функция проверки ошибки.
-
-    Returns:
-        Результат функции.
-
-    Example:
-        result = retry_on_error(
-            lambda: llm.generate(prompt),
-            max_retries=3,
-            error_condition=lambda x: x is None or x == ""
-        )
-    """
-    last_result = None
-
-    for attempt in range(max_retries + 1):
-        try:
-            result = func()
-            last_result = result
-
-            # Проверка условия ошибки
-            if error_condition and error_condition(result):
-                raise ValueError(f"Error condition met: {result}")
-
-            return result
-
-        except Exception as e:
-            if attempt == max_retries:
-                logger.error(f"Max retries exceeded: {e}")
-                raise
-
-            delay = base_delay * (2**attempt)
-            logger.warning(
-                f"Attempt {attempt + 1}/{max_retries + 1} failed: {e}. "
-                f"Retrying in {delay:.2f}s..."
-            )
-            time.sleep(delay)
-
-    return last_result  # type: ignore
-
-
 class RetryConfig:
     """Конфигурация retry логики."""
 
@@ -224,12 +171,6 @@ class RetryExecutor:
 
             except Exception as e:
                 last_exception = e
-
-                # Проверка необходимости retry
-                if should_retry and not should_retry(e):
-                    logger.debug(f"Not retrying: {e}")
-                    self.stats["failed_calls"] += 1
-                    raise
 
                 if attempt == self.config.max_retries:
                     logger.error(f"Max retries exceeded: {e}")

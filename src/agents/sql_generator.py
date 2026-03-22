@@ -274,8 +274,11 @@ class SQLGenerator:
         Returns:
             Список кортежей (sql, tables_used).
         """
+        from ..config.settings import get_settings
+        settings = get_settings()
+        
         prompt = Prompts.format_sql_generator(query, schema)
-        outputs = self.llm.generate(prompt, n=n_samples, temperature=0.7)
+        outputs = self.llm.generate(prompt, n=n_samples, temperature=settings.temperature)
 
         results: List[Tuple[str, List[str]]] = []
         for output in outputs:

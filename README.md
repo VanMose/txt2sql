@@ -1,8 +1,6 @@
-# 🗄️ Text-to-SQL Pipeline v0.1.4
+# 🗄️ Text-to-SQL Pipeline v0.1.5
 
 **Natural language → SQL** with Hybrid RAG, Graph reasoning, and Ollama LLM.
-
----
 
 ## 🚀 Quick Start
 
@@ -48,54 +46,47 @@ text2sql_baseline/
 │   ├── llm/               # Ollama & Transformers backends
 │   ├── pipeline/          # LangGraph workflows
 │   ├── retrieval/         # Vector DB (Qdrant) + Graph DB (Neo4j)
-│   └── db/                # Database executors
+│   ├── db/                # Database executors + Guardrails
+│   ├── services/          # Metrics, Caching, Result Cache
+│   └── config/            # Settings management
+├── configs/prompts/        # Prompt templates 
 ├── data/                   # SQLite databases
 ├── docker-compose.yml     # Neo4j + Qdrant
-└── docs/                   # Documentation
+└── .env                   # Configuration
 ```
 
 ---
 
-
-## 🛠️ Configuration (.env)
-
-```ini
-# LLM - Ollama (Primary)
-TEXT2SQL_USE_OLLAMA=true
-TEXT2SQL_LLM_MODEL=qwen2.5-coder:1.5b
-TEXT2SQL_OLLAMA_BASE_URL=http://localhost:11434
-
-# Databases
-TEXT2SQL_AUTO_DISCOVER_DBS=true
-TEXT2SQL_TOP_K_DBS=2
-
-# Vector DB
-TEXT2SQL_QDRANT_USE_LOCAL=false
-TEXT2SQL_QDRANT_URL=http://localhost:6333
-
-# Graph DB
-TEXT2SQL_NEO4J_URI=bolt://localhost:7687
-```
-
 ---
-
 
 ## 🏗️ Architecture
 
 ```
 User Query
     ↓
-Router Agent → Selects relevant databases
+Query Understanding → Intent, Entities, DB Hints
     ↓
-Schema Retrieval → Vector DB + Graph DB
+Router Agent → Selects relevant databases (Vector + Graph + Rerank)
     ↓
-SQL Generator (Ollama) → Generates SQL
+Schema Retrieval → Load schemas + Compress (54.6% savings)
     ↓
-Validator → Checks syntax & schema
+SQL Generator → Batch generation + Early stopping
     ↓
-Executor → Runs SQL
+Validator + Guardrails → Syntax + Security checks
     ↓
-Result
+Executor → Parallel execution with connection pooling
+    ↓
+Judge → Quality evaluation + Early exit
+    ↓
+Refiner (if needed) → Error correction
+    ↓
+Result + Metrics
 ```
 
 ---
+### Streamlit UI
+
+```bash
+streamlit run app/main.py
+```
+

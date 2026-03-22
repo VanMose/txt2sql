@@ -3,9 +3,14 @@ SQL Parser утилиты для анализа SQL запросов.
 
 Использование:
     from utils.sql_parser import extract_tables, get_query_type
-    
+
     tables = extract_tables("SELECT * FROM users")
     query_type = get_query_type("INSERT INTO users ...")
+
+Интеграция в валидацию:
+    - Проверка существования таблиц в схеме
+    - Извлечение колонок для валидации
+    - Определение типа запроса для метрик
 """
 import re
 from typing import List, Set
@@ -254,3 +259,71 @@ def count_columns(sql: str) -> int:
     """
     columns = extract_columns(sql)
     return len([c for c in columns if c != '*'])
+
+
+def has_join(sql: str) -> bool:
+    """
+    Проверить наличие JOIN в запросе.
+
+    Args:
+        sql: SQL запрос.
+
+    Returns:
+        True если есть JOIN.
+    """
+    return bool(re.search(r'\bJOIN\b', sql, re.IGNORECASE))
+
+
+def extract_join_tables(sql: str) -> List[str]:
+    """
+    Извлечь таблицы из JOIN условий.
+
+    Args:
+        sql: SQL запрос.
+
+    Returns:
+        Список таблиц из JOIN.
+    """
+    tables = []
+    join_pattern = r'\bJOIN\s+([a-zA-Z_][a-zA-Z0-9_]*)'
+    for match in re.finditer(join_pattern, sql, re.IGNORECASE):
+        tables.append(match.group(1).lower())
+    return tables
+
+
+def has_aggregate(sql: str) -> bool:
+    """
+    Проверить наличие агрегатных функций.
+
+    Args:
+        sql: SQL запрос.
+
+    Returns:
+        True если есть агрегатные функции.
+    """
+    agg_funcs = ["COUNT(", "SUM(", "AVG(", "MIN(", "MAX("]
+    sql_upper = sql.upper()
+    return any(func in sql_upper for func in agg_funcs)
+
+
+def extract_where_columns(sql: str) -> List[str]:
+    """
+    Извлечь колонки из WHERE условия.
+
+    Args:
+        sql: SQL запрос.
+
+    Returns:
+        Список колонок из WHERE.
+    """
+    columns = []
+    where_match = re.search(r'WHERE\s+(.*?)(?:GROUP|ORDER|LIMIT|$)', sql, re.IGNORECASE)
+    if where_match:
+        where_clause = where_match.group(1)
+        # Извлекаем имена колонок перед операторами сравнения
+        col_pattern = r'([a-zA-Z_][a-zA-Z0-9_]*)\s*[=<>!]'
+        for match in re.finditer(col_pattern, where_clause):
+            col = match.group(1).lower()
+            if col not in ('and', 'or', 'not', 'in', 'like', 'between'):
+                columns.append(col)
+    return columns

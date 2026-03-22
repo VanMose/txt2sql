@@ -4,7 +4,7 @@ __all__ = [
     "PipelineState",
     "SQLAttempt",
     "Text2SQLPipeline",
-    "MultiDBPipeline",
+    "PipelineResult",
 ]
 
 
@@ -16,9 +16,9 @@ def __getattr__(name):
         from .state import SQLAttempt
         return SQLAttempt
     elif name == "Text2SQLPipeline":
-        from .text2sql_pipeline import Text2SQLPipeline
+        from .pipeline import Text2SQLPipeline
         return Text2SQLPipeline
-    elif name == "MultiDBPipeline":
-        from .langgraph_pipeline import MultiDBPipeline
-        return MultiDBPipeline
+    elif name == "PipelineResult":
+        from .pipeline import PipelineResult
+        return PipelineResult
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

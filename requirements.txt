@@ -1,4 +1,4 @@
-# Text-to-SQL Pipeline v0.1.4 - Production Requirements
+# Text-to-SQL Pipeline v0.1.5 - Production Requirements
 # pip install -r requirements.txt
 
 # ===========================================
@@ -20,7 +20,7 @@ sqlalchemy>=2.0.0
 ollama>=0.2.0
 
 # ===========================================
-# LLM - Transformers (Fallback)
+# LLM - Transformers
 # ===========================================
 transformers>=4.40.0
 torch>=2.2.0

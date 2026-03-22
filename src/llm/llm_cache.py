@@ -266,8 +266,19 @@ class SemanticCache:
                 from sentence_transformers import SentenceTransformer
                 from src.config.settings import get_settings
                 settings = get_settings()
-                self._embedder = SentenceTransformer(settings.embedding_model)
-                logger.info(f"SemanticCache: SentenceTransformer loaded '{settings.embedding_model}'")
+                
+                # 🔥 Проверка локальной модели
+                model_path = settings.embedding_model
+                if settings.use_local_embedding:
+                    local_path = settings.get_local_embedding_path()
+                    if Path(local_path).exists():
+                        model_path = local_path
+                        logger.info(f"SemanticCache: Using local embedding model '{local_path}'")
+                    else:
+                        logger.warning(f"SemanticCache: Local embedding model not found '{local_path}', using default")
+                
+                self._embedder = SentenceTransformer(model_path)
+                logger.info(f"SemanticCache: SentenceTransformer loaded '{model_path}'")
             except ImportError:
                 logger.warning("SemanticCache: sentence-transformers not available, using exact match only")
                 self._embedder = None

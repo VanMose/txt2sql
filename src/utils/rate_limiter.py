@@ -8,7 +8,7 @@ Rate Limiter для LLM запросов.
 
 Использование:
     rate_limiter = RateLimiter(requests_per_minute=60)
-    
+
     @rate_limiter.limit()
     def generate(prompt: str) -> str:
         ...

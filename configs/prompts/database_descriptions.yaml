@@ -1,0 +1,5125 @@
+# Database Descriptions
+# These descriptions are injected into prompts to help the LLM understand the database context.
+# Version: Select via settings.db_description_version
+#
+# DESIGN PRINCIPLES:
+# - Universal descriptions that work with ANY database domain
+# - No hardcoded table names (tables are auto-discovered)
+# - Focus on domain/purpose, not specific data
+# - Multi-language support (EN/RU)
+# - Easy to extend for new databases
+
+# =============================================================================
+# FLIGHT & AVIATION DATABASES
+# =============================================================================
+
+music_1:
+  name: "Music Collection Database"
+
+  en: |
+    This database stores music collection information including artists, songs,
+    genres, and audio file metadata.
+    
+    **Purpose:**
+    - Catalog music artists and their origins
+    - Store song metadata with ratings and technical details
+    - Organize music by genres
+    - Track audio file information
+    
+    **Typical queries:**
+    - Find songs by artist or genre
+    - Get artist information by country
+    - Search songs by rating or technical criteria
+    
+
+  ru: |
+    Эта база данных хранит информацию о музыкальной коллекции, включая артистов,
+    песни, жанры и метаданные аудиофайлов.
+    
+    **Назначение:**
+    - Каталогизировать музыкальных артистов и их происхождение
+    - Хранить метаданные песен с рейтингами и техническими деталями
+    - Организовывать музыку по жанрам
+    - Отслеживать информацию об аудиофайлах
+    
+    **Типичные запросы:**
+    - Найти песни по артисту или жанру
+    - Получить информацию об артисте по стране
+    - Искать песни по рейтингу или техническим критериям
+    
+
+restaurants:
+  name: "Restaurant Directory Database"
+
+  en: |
+    This database contains restaurant information including locations,
+    cuisine types, and ratings.
+    
+    **Purpose:**
+    - Store restaurant location data
+    - Categorize restaurants by cuisine type
+    - Track restaurant ratings
+    
+    **Typical queries:**
+    - Find restaurants by location or cuisine
+    - Get restaurant ratings and reviews
+    - Search by geographic criteria
+    
+
+  ru: |
+    Эта база данных содержит информацию о ресторанах, включая местоположения,
+    типы кухни и рейтинги.
+    
+    **Назначение:**
+    - Хранить данные о местоположении ресторанов
+    - Категоризировать рестораны по типу кухни
+    - Отслеживать рейтинги ресторанов
+    
+    **Типичные запросы:**
+    - Найти рестораны по местоположению или кухне
+    - Получить рейтинги и отзывы ресторанов
+    - Искать по географическим критериям
+    
+
+restaurant_1:
+  name: "Student Restaurant Visits Database"
+
+  en: |
+    This database tracks student restaurant visits and preferences.
+    It includes student information, restaurant details, and visit records.
+    
+    **Purpose:**
+    - Store student information and preferences
+    - Maintain restaurant directory with types
+    - Track visit records with spending data
+    
+    **Typical queries:**
+    - Find student visit patterns
+    - Get restaurant popularity among students
+    - Analyze spending by student or restaurant
+    
+
+  ru: |
+    Эта база данных отслеживает посещения студентами ресторанов и предпочтения.
+    Она включает информацию о студентах, детали ресторанов и записи о посещениях.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и предпочтениях
+    - Вести каталог ресторанов с типами
+    - Отслеживать записи о посещениях с данными о тратах
+    
+    **Типичные запросы:**
+    - Найти паттерны посещений студентов
+    - Получить популярность ресторанов среди студентов
+    - Анализировать траты по студенту или ресторану
+    
+
+orchestra:
+  name: "Orchestra Performance Database"
+
+  en: |
+    This database manages orchestra performance information including conductors,
+    orchestras, performances, and individual shows.
+    
+    **Purpose:**
+    - Store conductor biographical data
+    - Maintain orchestra information and history
+    - Track performance events with ratings
+    - Record individual show details
+    
+    **Typical queries:**
+    - Find conductors by background or experience
+    - Get orchestra performance history
+    - Analyze attendance and ratings trends
+    
+
+  ru: |
+    Эта база данных управляет информацией о выступлениях оркестра, включая
+    дирижеров, оркестры, представления и отдельные шоу.
+    
+    **Назначение:**
+    - Хранить биографические данные дирижеров
+    - Вести информацию об оркестрах и историю
+    - Отслеживать события представлений с рейтингами
+    - Записывать детали отдельных шоу
+    
+    **Типичные запросы:**
+    - Найти дирижеров по происхождению или опыту
+    - Получить историю выступлений оркестра
+    - Анализировать тенденции посещаемости и рейтингов
+    
+
+flight_4:
+  name: "Global Aviation Database"
+
+  en: |
+    This is a comprehensive global aviation database with extensive coverage of
+    airlines, airports, and flight routes worldwide.
+    
+    **Purpose:**
+    - Maintain global registry of airlines with IATA/ICAO codes
+    - Store worldwide airport database with coordinates
+    - Track international flight route networks
+    
+    **Typical queries:**
+    - Find airlines by country or code
+    - Get airport information by IATA/ICAO code
+    - Analyze route networks
+    
+
+  ru: |
+    Это комплексная глобальная авиационная база данных с обширным охватом
+    авиакомпаний, аэропортов и авиамаршрутов по всему миру.
+    
+    **Назначение:**
+    - Вести глобальный реестр авиакомпаний с кодами IATA/ICAO
+    - Хранить мировую базу аэропортов с координатами
+    - Отслеживать международные сети авиамаршрутов
+    
+    **Типичные запросы:**
+    - Найти авиакомпании по стране или коду
+    - Получить информацию об аэропорте по коду IATA/ICAO
+    - Анализировать сети маршрутов
+    
+
+music_4:
+  name: "Music Events & Charts Database"
+
+  en: |
+    This database focuses on music festivals, artists, and chart performance.
+    It tracks artist information, music festival events, and weekly chart rankings.
+    
+    **Purpose:**
+    - Store artist biographical information
+    - Track music festival events and results
+    - Maintain weekly music chart rankings
+    
+    **Typical queries:**
+    - Find artists by biographical criteria
+    - Get festival information and results
+    - Analyze chart performance over time
+    
+
+  ru: |
+    Эта база данных фокусируется на музыкальных фестивалях, артистах и позициях в чартах.
+    Она отслеживает информацию об артистах, события музыкальных фестивалей
+    и еженедельные чарты песен.
+    
+    **Назначение:**
+    - Хранить биографическую информацию об артистах
+    - Отслеживать события музыкальных фестивалей и результаты
+    - Вести еженедельные музыкальные чарты
+    
+    **Типичные запросы:**
+    - Найти артистов по биографическим критериям
+    - Получить информацию о фестивале и результатах
+    - Анализировать позиции в чартах во времени
+    
+
+flight_2:
+  name: "Airline Routes Database"
+
+  en: |
+    This database focuses on airline routes and airport information.
+    It contains data about airlines, airports across different countries,
+    and flight connections between airports.
+    
+    **Purpose:**
+    - Store airline company information
+    - Maintain airport database with location data
+    - Track flight routes and connections
+    
+    **Typical queries:**
+    - Find all airports in a country
+    - Get routes operated by specific airline
+    - Find connections between cities
+    
+
+  ru: |
+    Эта база данных фокусируется на авиамаршрутах и информации об аэропортах.
+    Она содержит данные об авиакомпаниях, аэропортах в разных странах
+    и авиарейсах между аэропортами.
+    
+    **Назначение:**
+    - Хранить информацию об авиакомпаниях
+    - Вести базу аэропортов с данными о местоположении
+    - Отслеживать авиамаршруты и соединения
+    
+    **Типичные запросы:**
+    - Найти все аэропорты в стране
+    - Получить маршруты, обслуживаемые конкретной авиакомпанией
+    - Найти соединения между городами
+    
+
+flight_1:
+  name: "Flight Operations Database"
+
+  en: |
+    This database contains information about airline operations including aircraft,
+    employees, certifications, and flight schedules.
+    
+    **Purpose:**
+    - Track aircraft fleet and their operational capabilities
+    - Manage employee certifications and qualifications
+    - Record flight schedules with pricing information
+    
+    **Typical queries:**
+    - Find employees certified for specific aircraft
+    - Get flight schedules between cities
+    - Check aircraft capacity and range
+    
+
+  ru: |
+    Эта база данных содержит информацию об авиаоперациях, включая воздушные суда,
+    сотрудников, сертификаты и расписания рейсов.
+    
+    **Назначение:**
+    - Отслеживать парк воздушных судов и их операционные возможности
+    - Управлять сертификатами и квалификациями сотрудников
+    - Записывать расписания рейсов с информацией о ценах
+    
+    **Типичные запросы:**
+    - Найти сотрудников, сертифицированных для конкретных самолетов
+    - Получить расписание рейсов между городами
+    - Проверить вместимость и дальность самолетов
+    
+
+activity_1:
+  name: "Student Activities"
+
+  en: |
+    This database contains information about student activities, faculty participation, and event management.
+    It is designed for managing and querying student activities, faculty participation, and event management.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о student activities, faculty participation, and event management.
+    Она предназначена для управления и запросов данных о student activities, faculty participation, and event management.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+aircraft:
+  name: "Aircraft Management"
+
+  en: |
+    This database contains information about aircraft specifications and maintenance.
+    It is designed for managing and querying aircraft specifications and maintenance.
+    
+    **Purpose:**
+    - Track vehicles, routes, and schedules
+    - Manage fleet and maintenance records
+    - Store location and station data
+    
+    **Typical queries:**
+    - Find routes by origin and destination
+    - Get vehicle maintenance history
+    - Analyze schedule adherence and delays
+
+  ru: |
+    Эта база данных содержит информацию о aircraft specifications and maintenance.
+    Она предназначена для управления и запросов данных о aircraft specifications and maintenance.
+    
+    **Назначение:**
+    - Отслеживать транспортные средства, маршруты и расписания
+    - Управлять парком и записями о техническом обслуживании
+    - Хранить данные о местоположении и станциях
+    
+    **Типичные запросы:**
+    - Найти маршруты по пункту отправления и назначения
+    - Получить историю обслуживания транспортных средств
+    - Анализировать соблюдение расписания и задержки
+
+allergy_1:
+  name: "Allergy Records"
+
+  en: |
+    This database contains information about patient allergies and allergic reactions.
+    It is designed for managing and querying patient allergies and allergic reactions.
+    
+    **Purpose:**
+    - Store patient information and medical history
+    - Track treatments and medications
+    - Manage healthcare provider data
+    
+    **Typical queries:**
+    - Find patients by condition or treatment
+    - Get medication prescriptions and dosages
+    - Analyze treatment outcomes
+
+  ru: |
+    Эта база данных содержит информацию о patient allergies and allergic reactions.
+    Она предназначена для управления и запросов данных о patient allergies and allergic reactions.
+    
+    **Назначение:**
+    - Хранить информацию о пациентах и медицинской истории
+    - Отслеживать лечение и медикаменты
+    - Управлять данными о поставщиках медицинских услуг
+    
+    **Типичные запросы:**
+    - Найти пациентов по диагнозу или лечению
+    - Получить назначения лекарств и дозировки
+    - Анализировать результаты лечения
+
+apartment_rentals:
+  name: "Apartment Rentals"
+
+  en: |
+    This database contains information about apartment listings, tenants, and leases.
+    It is designed for managing and querying apartment listings, tenants, and leases.
+    
+    **Purpose:**
+    - Manage room inventory and bookings
+    - Track guest information and stays
+    - Record pricing and availability
+    
+    **Typical queries:**
+    - Find available rooms by date
+    - Get guest stay history
+    - Analyze occupancy rates and revenue
+
+  ru: |
+    Эта база данных содержит информацию о apartment listings, tenants, and leases.
+    Она предназначена для управления и запросов данных о apartment listings, tenants, and leases.
+    
+    **Назначение:**
+    - Управлять номерным фондом и бронированиями
+    - Отслеживать информацию о гостях и проживаниях
+    - Записывать цены и доступность
+    
+    **Типичные запросы:**
+    - Найти доступные номера по дате
+    - Получить историю проживания гостей
+    - Анализировать коэффициенты заполняемости и выручку
+
+architecture:
+  name: "Architecture Database"
+
+  en: |
+    This database contains information about default data.
+    It is designed for managing and querying default data.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о default data.
+    Она предназначена для управления и запросов данных о default data.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+assets_maintenance:
+  name: "IT Asset Management"
+
+  en: |
+    This database contains information about IT assets, maintenance, and repairs.
+    It is designed for managing and querying IT assets, maintenance, and repairs.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о IT assets, maintenance, and repairs.
+    Она предназначена для управления и запросов данных о IT assets, maintenance, and repairs.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+baseball_1:
+  name: "Baseball League"
+
+  en: |
+    This database contains information about baseball teams, players, and game statistics.
+    It is designed for managing and querying baseball teams, players, and game statistics.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о baseball teams, players, and game statistics.
+    Она предназначена для управления и запросов данных о baseball teams, players, and game statistics.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+battle_death:
+  name: "Historical Battles"
+
+  en: |
+    This database contains information about historical battles, commanders, and casualties.
+    It is designed for managing and querying historical battles, commanders, and casualties.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о historical battles, commanders, and casualties.
+    Она предназначена для управления и запросов данных о historical battles, commanders, and casualties.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+behavior_monitoring:
+  name: "Behavior Tracking"
+
+  en: |
+    This database contains information about student behavior monitoring and incidents.
+    It is designed for managing and querying student behavior monitoring and incidents.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о student behavior monitoring and incidents.
+    Она предназначена для управления и запросов данных о student behavior monitoring and incidents.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+bike_1:
+  name: "Cycling Events"
+
+  en: |
+    This database contains information about cycling races, riders, and race results.
+    It is designed for managing and querying cycling races, riders, and race results.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о cycling races, riders, and race results.
+    Она предназначена для управления и запросов данных о cycling races, riders, and race results.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+body_builder:
+  name: "Bodybuilding"
+
+  en: |
+    This database contains information about bodybuilding competitions and athlete records.
+    It is designed for managing and querying bodybuilding competitions and athlete records.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о bodybuilding competitions and athlete records.
+    Она предназначена для управления и запросов данных о bodybuilding competitions and athlete records.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+book_2:
+  name: "Book 2 Database"
+
+  en: |
+    This database contains information about default data.
+    It is designed for managing and querying default data.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о default data.
+    Она предназначена для управления и запросов данных о default data.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+browser_web:
+  name: "Web Browsing"
+
+  en: |
+    This database contains information about web browsers, URLs, and browsing history.
+    It is designed for managing and querying web browsers, URLs, and browsing history.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о web browsers, URLs, and browsing history.
+    Она предназначена для управления и запросов данных о web browsers, URLs, and browsing history.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+candidate_poll:
+  name: "Political Polling"
+
+  en: |
+    This database contains information about political candidates and opinion polls.
+    It is designed for managing and querying political candidates and opinion polls.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о political candidates and opinion polls.
+    Она предназначена для управления и запросов данных о political candidates and opinion polls.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+car_1:
+  name: "Car 1 Database"
+
+  en: |
+    This database contains information about default data.
+    It is designed for managing and querying default data.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о default data.
+    Она предназначена для управления и запросов данных о default data.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+chinook_1:
+  name: "Music Store"
+
+  en: |
+    This database contains information about music store, artists, albums, and sales.
+    It is designed for managing and querying music store, artists, albums, and sales.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о music store, artists, albums, and sales.
+    Она предназначена для управления и запросов данных о music store, artists, albums, and sales.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+cinema:
+  name: "Cinema Management"
+
+  en: |
+    This database contains information about cinemas, movies, and showtimes.
+    It is designed for managing and querying cinemas, movies, and showtimes.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о cinemas, movies, and showtimes.
+    Она предназначена для управления и запросов данных о cinemas, movies, and showtimes.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+city_record:
+  name: "City Records"
+
+  en: |
+    This database contains information about city information and demographic records.
+    It is designed for managing and querying city information and demographic records.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о city information and demographic records.
+    Она предназначена для управления и запросов данных о city information and demographic records.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+climbing:
+  name: "Mountain Climbing"
+
+  en: |
+    This database contains information about climbing expeditions, climbers, and mountains.
+    It is designed for managing and querying climbing expeditions, climbers, and mountains.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о climbing expeditions, climbers, and mountains.
+    Она предназначена для управления и запросов данных о climbing expeditions, climbers, and mountains.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+club_1:
+  name: "Club 1 Database"
+
+  en: |
+    This database contains information about default data.
+    It is designed for managing and querying default data.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о default data.
+    Она предназначена для управления и запросов данных о default data.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+coffee_shop:
+  name: "Coffee Shop"
+
+  en: |
+    This database contains information about coffee shop products, customers, and orders.
+    It is designed for managing and querying coffee shop products, customers, and orders.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о coffee shop products, customers, and orders.
+    Она предназначена для управления и запросов данных о coffee shop products, customers, and orders.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+college_1:
+  name: "College Information"
+
+  en: |
+    This database contains information about college departments, students, and enrollment.
+    It is designed for managing and querying college departments, students, and enrollment.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о college departments, students, and enrollment.
+    Она предназначена для управления и запросов данных о college departments, students, and enrollment.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+college_2:
+  name: "College Athletics"
+
+  en: |
+    This database contains information about college sports programs and athlete participation.
+    It is designed for managing and querying college sports programs and athlete participation.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о college sports programs and athlete participation.
+    Она предназначена для управления и запросов данных о college sports programs and athlete participation.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+college_3:
+  name: "Academic Records"
+
+  en: |
+    This database contains information about college courses, grades, and student transcripts.
+    It is designed for managing and querying college courses, grades, and student transcripts.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о college courses, grades, and student transcripts.
+    Она предназначена для управления и запросов данных о college courses, grades, and student transcripts.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+company_1:
+  name: "Company Structure"
+
+  en: |
+    This database contains information about company departments, employees, and hierarchy.
+    It is designed for managing and querying company departments, employees, and hierarchy.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о company departments, employees, and hierarchy.
+    Она предназначена для управления и запросов данных о company departments, employees, and hierarchy.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+company_employee:
+  name: "Employee Management"
+
+  en: |
+    This database contains information about employee information and performance.
+    It is designed for managing and querying employee information and performance.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о employee information and performance.
+    Она предназначена для управления и запросов данных о employee information and performance.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+company_office:
+  name: "Office Management"
+
+  en: |
+    This database contains information about company offices and employee assignments.
+    It is designed for managing and querying company offices and employee assignments.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о company offices and employee assignments.
+    Она предназначена для управления и запросов данных о company offices and employee assignments.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+concert_singer:
+  name: "Concert & Performance"
+
+  en: |
+    This database contains information about concerts, singers, and performance events.
+    It is designed for managing and querying concerts, singers, and performance events.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о concerts, singers, and performance events.
+    Она предназначена для управления и запросов данных о concerts, singers, and performance events.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+county_public_safety:
+  name: "Public Safety"
+
+  en: |
+    This database contains information about county public safety departments and incidents.
+    It is designed for managing and querying county public safety departments and incidents.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о county public safety departments and incidents.
+    Она предназначена для управления и запросов данных о county public safety departments and incidents.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+course_teach:
+  name: "Course Management"
+
+  en: |
+    This database contains information about courses, teachers, and student enrollment.
+    It is designed for managing and querying courses, teachers, and student enrollment.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о courses, teachers, and student enrollment.
+    Она предназначена для управления и запросов данных о courses, teachers, and student enrollment.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+cre_Doc_Control_Systems:
+  name: "Document Systems"
+
+  en: |
+    This database contains information about document control and workflows.
+    It is designed for managing and querying document control and workflows.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о document control and workflows.
+    Она предназначена для управления и запросов данных о document control and workflows.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+cre_Doc_Template_Mgt:
+  name: "Template Management"
+
+  en: |
+    This database contains information about document templates and automation.
+    It is designed for managing and querying document templates and automation.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о document templates and automation.
+    Она предназначена для управления и запросов данных о document templates and automation.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+cre_Doc_Tracking_DB:
+  name: "Document Workflow"
+
+  en: |
+    This database contains information about document tracking and approvals.
+    It is designed for managing and querying document tracking and approvals.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о document tracking and approvals.
+    Она предназначена для управления и запросов данных о document tracking and approvals.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+cre_Docs_and_Epenses:
+  name: "Expense Management"
+
+  en: |
+    This database contains information about expense documents and reimbursements.
+    It is designed for managing and querying expense documents and reimbursements.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о expense documents and reimbursements.
+    Она предназначена для управления и запросов данных о expense documents and reimbursements.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+cre_Drama_Workshop_Groups:
+  name: "Drama Groups"
+
+  en: |
+    This database contains information about drama workshop groups and performances.
+    It is designed for managing and querying drama workshop groups and performances.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о drama workshop groups and performances.
+    Она предназначена для управления и запросов данных о drama workshop groups and performances.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+cre_Theme_park:
+  name: "Theme Park"
+
+  en: |
+    This database contains information about theme park attractions, visitors, and operations.
+    It is designed for managing and querying theme park attractions, visitors, and operations.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о theme park attractions, visitors, and operations.
+    Она предназначена для управления и запросов данных о theme park attractions, visitors, and operations.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+csu_1:
+  name: "University System"
+
+  en: |
+    This database contains information about university campuses, colleges, and student enrollment.
+    It is designed for managing and querying university campuses, colleges, and student enrollment.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о university campuses, colleges, and student enrollment.
+    Она предназначена для управления и запросов данных о university campuses, colleges, and student enrollment.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+culture_company:
+  name: "Cultural Events"
+
+  en: |
+    This database contains information about cultural events, performances, and ticket sales.
+    It is designed for managing and querying cultural events, performances, and ticket sales.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о cultural events, performances, and ticket sales.
+    Она предназначена для управления и запросов данных о cultural events, performances, and ticket sales.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+customer_complaints:
+  name: "Customer Support"
+
+  en: |
+    This database contains information about customer complaints and resolution tracking.
+    It is designed for managing and querying customer complaints and resolution tracking.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о customer complaints and resolution tracking.
+    Она предназначена для управления и запросов данных о customer complaints and resolution tracking.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+customer_deliveries:
+  name: "Delivery Service"
+
+  en: |
+    This database contains information about customer deliveries and shipping routes.
+    It is designed for managing and querying customer deliveries and shipping routes.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о customer deliveries and shipping routes.
+    Она предназначена для управления и запросов данных о customer deliveries and shipping routes.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+customers_and_addresses:
+  name: "Customer Directory"
+
+  en: |
+    This database contains information about customer information and addresses.
+    It is designed for managing and querying customer information and addresses.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о customer information and addresses.
+    Она предназначена для управления и запросов данных о customer information and addresses.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+customers_and_invoices:
+  name: "Customer Billing"
+
+  en: |
+    This database contains information about customer invoices, payments, and orders.
+    It is designed for managing and querying customer invoices, payments, and orders.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о customer invoices, payments, and orders.
+    Она предназначена для управления и запросов данных о customer invoices, payments, and orders.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+customers_and_products_contacts:
+  name: "Customer Management"
+
+  en: |
+    This database contains information about customers, products, and contact information.
+    It is designed for managing and querying customers, products, and contact information.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о customers, products, and contact information.
+    Она предназначена для управления и запросов данных о customers, products, and contact information.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+customers_campaigns_ecommerce:
+  name: "E-Commerce Campaigns"
+
+  en: |
+    This database contains information about customer campaigns and online sales.
+    It is designed for managing and querying customer campaigns and online sales.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о customer campaigns and online sales.
+    Она предназначена для управления и запросов данных о customer campaigns and online sales.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+customers_card_transactions:
+  name: "Card Transactions"
+
+  en: |
+    This database contains information about customer credit card transactions.
+    It is designed for managing and querying customer credit card transactions.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о customer credit card transactions.
+    Она предназначена для управления и запросов данных о customer credit card transactions.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+debate:
+  name: "Debate Competition"
+
+  en: |
+    This database contains information about debate tournaments, teams, and arguments.
+    It is designed for managing and querying debate tournaments, teams, and arguments.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о debate tournaments, teams, and arguments.
+    Она предназначена для управления и запросов данных о debate tournaments, teams, and arguments.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+decoration_competition:
+  name: "Decoration Contest"
+
+  en: |
+    This database contains information about decoration competitions and participants.
+    It is designed for managing and querying decoration competitions and participants.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о decoration competitions and participants.
+    Она предназначена для управления и запросов данных о decoration competitions and participants.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+department_management:
+  name: "Department Operations"
+
+  en: |
+    This database contains information about department stores, products, and suppliers.
+    It is designed for managing and querying department stores, products, and suppliers.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о department stores, products, and suppliers.
+    Она предназначена для управления и запросов данных о department stores, products, and suppliers.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+department_store:
+  name: "Retail Department Store"
+
+  en: |
+    This database contains information about department store products, suppliers, and sales.
+    It is designed for managing and querying department store products, suppliers, and sales.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о department store products, suppliers, and sales.
+    Она предназначена для управления и запросов данных о department store products, suppliers, and sales.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+device:
+  name: "Device Management"
+
+  en: |
+    This database contains information about devices, applications, and usage.
+    It is designed for managing and querying devices, applications, and usage.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о devices, applications, and usage.
+    Она предназначена для управления и запросов данных о devices, applications, and usage.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+document_management:
+  name: "Document System"
+
+  en: |
+    This database contains information about documents, folders, and access control.
+    It is designed for managing and querying documents, folders, and access control.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о documents, folders, and access control.
+    Она предназначена для управления и запросов данных о documents, folders, and access control.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+dog_kennels:
+  name: "Dog Kennels"
+
+  en: |
+    This database contains information about dog kennels, dogs, and owner information.
+    It is designed for managing and querying dog kennels, dogs, and owner information.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о dog kennels, dogs, and owner information.
+    Она предназначена для управления и запросов данных о dog kennels, dogs, and owner information.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+dorm_1:
+  name: "Dormitory Management"
+
+  en: |
+    This database contains information about dorm rooms, residents, and facilities.
+    It is designed for managing and querying dorm rooms, residents, and facilities.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о dorm rooms, residents, and facilities.
+    Она предназначена для управления и запросов данных о dorm rooms, residents, and facilities.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+driving_school:
+  name: "Driving School"
+
+  en: |
+    This database contains information about driving lessons, instructors, and students.
+    It is designed for managing and querying driving lessons, instructors, and students.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о driving lessons, instructors, and students.
+    Она предназначена для управления и запросов данных о driving lessons, instructors, and students.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+e_government:
+  name: "E-Government"
+
+  en: |
+    This database contains information about government services and citizen interactions.
+    It is designed for managing and querying government services and citizen interactions.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о government services and citizen interactions.
+    Она предназначена для управления и запросов данных о government services and citizen interactions.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+e_learning:
+  name: "E-Learning Platform"
+
+  en: |
+    This database contains information about online courses, students, and course progress.
+    It is designed for managing and querying online courses, students, and course progress.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о online courses, students, and course progress.
+    Она предназначена для управления и запросов данных о online courses, students, and course progress.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+election:
+  name: "Election System"
+
+  en: |
+    This database contains information about elections, candidates, and voting results.
+    It is designed for managing and querying elections, candidates, and voting results.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о elections, candidates, and voting results.
+    Она предназначена для управления и запросов данных о elections, candidates, and voting results.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+election_representative:
+  name: "Political Representation"
+
+  en: |
+    This database contains information about elected representatives and constituencies.
+    It is designed for managing and querying elected representatives and constituencies.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о elected representatives and constituencies.
+    Она предназначена для управления и запросов данных о elected representatives and constituencies.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+employee_hire_evaluation:
+  name: "HR Management"
+
+  en: |
+    This database contains information about employee hiring, training, and evaluations.
+    It is designed for managing and querying employee hiring, training, and evaluations.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о employee hiring, training, and evaluations.
+    Она предназначена для управления и запросов данных о employee hiring, training, and evaluations.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+entertainment_awards:
+  name: "Entertainment Awards"
+
+  en: |
+    This database contains information about award ceremonies, nominees, and winners.
+    It is designed for managing and querying award ceremonies, nominees, and winners.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о award ceremonies, nominees, and winners.
+    Она предназначена для управления и запросов данных о award ceremonies, nominees, and winners.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+entrepreneur:
+  name: "Entrepreneurship"
+
+  en: |
+    This database contains information about entrepreneurs, businesses, and investments.
+    It is designed for managing and querying entrepreneurs, businesses, and investments.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о entrepreneurs, businesses, and investments.
+    Она предназначена для управления и запросов данных о entrepreneurs, businesses, and investments.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+epinions_1:
+  name: "Product Reviews"
+
+  en: |
+    This database contains information about product reviews and ratings.
+    It is designed for managing and querying product reviews and ratings.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о product reviews and ratings.
+    Она предназначена для управления и запросов данных о product reviews and ratings.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+farm:
+  name: "Farm Management"
+
+  en: |
+    This database contains information about farm operations, crops, and livestock.
+    It is designed for managing and querying farm operations, crops, and livestock.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о farm operations, crops, and livestock.
+    Она предназначена для управления и запросов данных о farm operations, crops, and livestock.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+film_rank:
+  name: "Film Rankings"
+
+  en: |
+    This database contains information about film rankings and box office performance.
+    It is designed for managing and querying film rankings and box office performance.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о film rankings and box office performance.
+    Она предназначена для управления и запросов данных о film rankings and box office performance.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+flight_company:
+  name: "Flight Operations"
+
+  en: |
+    This database contains information about airline companies, flights, and airport operations.
+    It is designed for managing and querying airline companies, flights, and airport operations.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о airline companies, flights, and airport operations.
+    Она предназначена для управления и запросов данных о airline companies, flights, and airport operations.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+formula_1:
+  name: "Formula 1 Database"
+
+  en: |
+    This database contains information about default data.
+    It is designed for managing and querying default data.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о default data.
+    Она предназначена для управления и запросов данных о default data.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+game_1:
+  name: "Game Competition"
+
+  en: |
+    This database contains information about game competitions, teams, and match results.
+    It is designed for managing and querying game competitions, teams, and match results.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о game competitions, teams, and match results.
+    Она предназначена для управления и запросов данных о game competitions, teams, and match results.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+game_injury:
+  name: "Sports Injuries"
+
+  en: |
+    This database contains information about athlete injuries and recovery tracking.
+    It is designed for managing and querying athlete injuries and recovery tracking.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о athlete injuries and recovery tracking.
+    Она предназначена для управления и запросов данных о athlete injuries and recovery tracking.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+gas_company:
+  name: "Gas Utility"
+
+  en: |
+    This database contains information about gas company operations and customer accounts.
+    It is designed for managing and querying gas company operations and customer accounts.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о gas company operations and customer accounts.
+    Она предназначена для управления и запросов данных о gas company operations and customer accounts.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+geo:
+  name: "Geography"
+
+  en: |
+    This database contains information about geographic features, countries, and statistics.
+    It is designed for managing and querying geographic features, countries, and statistics.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о geographic features, countries, and statistics.
+    Она предназначена для управления и запросов данных о geographic features, countries, and statistics.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+gymnast:
+  name: "Gymnastics"
+
+  en: |
+    This database contains information about gymnastics competitions and athlete performances.
+    It is designed for managing and querying gymnastics competitions and athlete performances.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о gymnastics competitions and athlete performances.
+    Она предназначена для управления и запросов данных о gymnastics competitions and athlete performances.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+hospital_1:
+  name: "Hospital Management"
+
+  en: |
+    This database contains information about hospital departments, staff, and patients.
+    It is designed for managing and querying hospital departments, staff, and patients.
+    
+    **Purpose:**
+    - Store patient information and medical history
+    - Track treatments and medications
+    - Manage healthcare provider data
+    
+    **Typical queries:**
+    - Find patients by condition or treatment
+    - Get medication prescriptions and dosages
+    - Analyze treatment outcomes
+
+  ru: |
+    Эта база данных содержит информацию о hospital departments, staff, and patients.
+    Она предназначена для управления и запросов данных о hospital departments, staff, and patients.
+    
+    **Назначение:**
+    - Хранить информацию о пациентах и медицинской истории
+    - Отслеживать лечение и медикаменты
+    - Управлять данными о поставщиках медицинских услуг
+    
+    **Типичные запросы:**
+    - Найти пациентов по диагнозу или лечению
+    - Получить назначения лекарств и дозировки
+    - Анализировать результаты лечения
+
+hr_1:
+  name: "Human Resources"
+
+  en: |
+    This database contains information about employee records, departments, and salaries.
+    It is designed for managing and querying employee records, departments, and salaries.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о employee records, departments, and salaries.
+    Она предназначена для управления и запросов данных о employee records, departments, and salaries.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+icfp_1:
+  name: "Programming Contest"
+
+  en: |
+    This database contains information about programming competition and submissions.
+    It is designed for managing and querying programming competition and submissions.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о programming competition and submissions.
+    Она предназначена для управления и запросов данных о programming competition and submissions.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+imdb:
+  name: "Movie Database"
+
+  en: |
+    This database contains information about movies, actors, directors, and ratings.
+    It is designed for managing and querying movies, actors, directors, and ratings.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о movies, actors, directors, and ratings.
+    Она предназначена для управления и запросов данных о movies, actors, directors, and ratings.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+inn_1:
+  name: "Inn Management"
+
+  en: |
+    This database contains information about inn bookings, guests, and rooms.
+    It is designed for managing and querying inn bookings, guests, and rooms.
+    
+    **Purpose:**
+    - Manage room inventory and bookings
+    - Track guest information and stays
+    - Record pricing and availability
+    
+    **Typical queries:**
+    - Find available rooms by date
+    - Get guest stay history
+    - Analyze occupancy rates and revenue
+
+  ru: |
+    Эта база данных содержит информацию о inn bookings, guests, and rooms.
+    Она предназначена для управления и запросов данных о inn bookings, guests, and rooms.
+    
+    **Назначение:**
+    - Управлять номерным фондом и бронированиями
+    - Отслеживать информацию о гостях и проживаниях
+    - Записывать цены и доступность
+    
+    **Типичные запросы:**
+    - Найти доступные номера по дате
+    - Получить историю проживания гостей
+    - Анализировать коэффициенты заполняемости и выручку
+
+insurance_and_eClaims:
+  name: "Electronic Claims"
+
+  en: |
+    This database contains information about insurance claims and electronic processing.
+    It is designed for managing and querying insurance claims and electronic processing.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о insurance claims and electronic processing.
+    Она предназначена для управления и запросов данных о insurance claims and electronic processing.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+insurance_fnol:
+  name: "Insurance Claims"
+
+  en: |
+    This database contains information about first notice of loss and claim processing.
+    It is designed for managing and querying first notice of loss and claim processing.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о first notice of loss and claim processing.
+    Она предназначена для управления и запросов данных о first notice of loss and claim processing.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+insurance_policies:
+  name: "Insurance Policies"
+
+  en: |
+    This database contains information about insurance policies, customers, and claims.
+    It is designed for managing and querying insurance policies, customers, and claims.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о insurance policies, customers, and claims.
+    Она предназначена для управления и запросов данных о insurance policies, customers, and claims.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+journal_committee:
+  name: "Academic Committee"
+
+  en: |
+    This database contains information about journal editorial committees and paper reviews.
+    It is designed for managing and querying journal editorial committees and paper reviews.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о journal editorial committees and paper reviews.
+    Она предназначена для управления и запросов данных о journal editorial committees and paper reviews.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+loan_1:
+  name: "Loan Management"
+
+  en: |
+    This database contains information about bank loans, customers, and payment records.
+    It is designed for managing and querying bank loans, customers, and payment records.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о bank loans, customers, and payment records.
+    Она предназначена для управления и запросов данных о bank loans, customers, and payment records.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+local_govt_and_lot:
+  name: "Local Government"
+
+  en: |
+    This database contains information about local government departments and services.
+    It is designed for managing and querying local government departments and services.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о local government departments and services.
+    Она предназначена для управления и запросов данных о local government departments and services.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+local_govt_in_alabama:
+  name: "Alabama Local Government"
+
+  en: |
+    This database contains information about Alabama local government structure.
+    It is designed for managing and querying Alabama local government structure.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о Alabama local government structure.
+    Она предназначена для управления и запросов данных о Alabama local government structure.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+local_govt_mdm:
+  name: "Government Data"
+
+  en: |
+    This database contains information about local government master data.
+    It is designed for managing and querying local government master data.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о local government master data.
+    Она предназначена для управления и запросов данных о local government master data.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+machine_repair:
+  name: "Machine Maintenance"
+
+  en: |
+    This database contains information about machine repairs and maintenance records.
+    It is designed for managing and querying machine repairs and maintenance records.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о machine repairs and maintenance records.
+    Она предназначена для управления и запросов данных о machine repairs and maintenance records.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+manufactory_1:
+  name: "Manufacturing"
+
+  en: |
+    This database contains information about manufacturing orders, products, and machines.
+    It is designed for managing and querying manufacturing orders, products, and machines.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о manufacturing orders, products, and machines.
+    Она предназначена для управления и запросов данных о manufacturing orders, products, and machines.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+manufacturer:
+  name: "Product Manufacturing"
+
+  en: |
+    This database contains information about manufacturers, products, and distribution.
+    It is designed for managing and querying manufacturers, products, and distribution.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о manufacturers, products, and distribution.
+    Она предназначена для управления и запросов данных о manufacturers, products, and distribution.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+match_season:
+  name: "Sports Seasons"
+
+  en: |
+    This database contains information about sports matches, teams, and season statistics.
+    It is designed for managing and querying sports matches, teams, and season statistics.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о sports matches, teams, and season statistics.
+    Она предназначена для управления и запросов данных о sports matches, teams, and season statistics.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+medicine_enzyme_interaction:
+  name: "Medical Research"
+
+  en: |
+    This database contains information about medicine and enzyme interactions.
+    It is designed for managing and querying medicine and enzyme interactions.
+    
+    **Purpose:**
+    - Store patient information and medical history
+    - Track treatments and medications
+    - Manage healthcare provider data
+    
+    **Typical queries:**
+    - Find patients by condition or treatment
+    - Get medication prescriptions and dosages
+    - Analyze treatment outcomes
+
+  ru: |
+    Эта база данных содержит информацию о medicine and enzyme interactions.
+    Она предназначена для управления и запросов данных о medicine and enzyme interactions.
+    
+    **Назначение:**
+    - Хранить информацию о пациентах и медицинской истории
+    - Отслеживать лечение и медикаменты
+    - Управлять данными о поставщиках медицинских услуг
+    
+    **Типичные запросы:**
+    - Найти пациентов по диагнозу или лечению
+    - Получить назначения лекарств и дозировки
+    - Анализировать результаты лечения
+
+mountain_photos:
+  name: "Photography"
+
+  en: |
+    This database contains information about photography locations, photographers, and images.
+    It is designed for managing and querying photography locations, photographers, and images.
+    
+    **Purpose:**
+    - Store research data and experiments
+    - Track scientists and publications
+    - Manage laboratory information
+    
+    **Typical queries:**
+    - Find research by topic or scientist
+    - Get experiment results and analysis
+    - Analyze publication citations
+
+  ru: |
+    Эта база данных содержит информацию о photography locations, photographers, and images.
+    Она предназначена для управления и запросов данных о photography locations, photographers, and images.
+    
+    **Назначение:**
+    - Хранить исследовательские данные и эксперименты
+    - Отслеживать учёных и публикации
+    - Управлять лабораторной информацией
+    
+    **Типичные запросы:**
+    - Найти исследования по теме или учёному
+    - Получить результаты и анализ экспериментов
+    - Анализировать цитирования публикаций
+
+movie_1:
+  name: "Movie Collection"
+
+  en: |
+    This database contains information about movies, directors, and movie stars.
+    It is designed for managing and querying movies, directors, and movie stars.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о movies, directors, and movie stars.
+    Она предназначена для управления и запросов данных о movies, directors, and movie stars.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+museum_visit:
+  name: "Museum Visit Database"
+
+  en: |
+    This database contains information about default data.
+    It is designed for managing and querying default data.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о default data.
+    Она предназначена для управления и запросов данных о default data.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+musical:
+  name: "Musical Theater"
+
+  en: |
+    This database contains information about musicals, theaters, and performances.
+    It is designed for managing and querying musicals, theaters, and performances.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о musicals, theaters, and performances.
+    Она предназначена для управления и запросов данных о musicals, theaters, and performances.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+network_1:
+  name: "Network Infrastructure"
+
+  en: |
+    This database contains information about network devices and connectivity.
+    It is designed for managing and querying network devices and connectivity.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о network devices and connectivity.
+    Она предназначена для управления и запросов данных о network devices and connectivity.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+network_2:
+  name: "Network Systems"
+
+  en: |
+    This database contains information about network topology and device management.
+    It is designed for managing and querying network topology and device management.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о network topology and device management.
+    Она предназначена для управления и запросов данных о network topology and device management.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+news_report:
+  name: "News Reporting"
+
+  en: |
+    This database contains information about news reports, journalists, and publications.
+    It is designed for managing and querying news reports, journalists, and publications.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о news reports, journalists, and publications.
+    Она предназначена для управления и запросов данных о news reports, journalists, and publications.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+party_host:
+  name: "Event Hosting"
+
+  en: |
+    This database contains information about party events, hosts, and guest attendance.
+    It is designed for managing and querying party events, hosts, and guest attendance.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о party events, hosts, and guest attendance.
+    Она предназначена для управления и запросов данных о party events, hosts, and guest attendance.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+party_people:
+  name: "Social Events"
+
+  en: |
+    This database contains information about party organization and people participation.
+    It is designed for managing and querying party organization and people participation.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о party organization and people participation.
+    Она предназначена для управления и запросов данных о party organization and people participation.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+performance_attendance:
+  name: "Performance Tracking"
+
+  en: |
+    This database contains information about performance events and audience attendance.
+    It is designed for managing and querying performance events and audience attendance.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о performance events and audience attendance.
+    Она предназначена для управления и запросов данных о performance events and audience attendance.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+perpetrator:
+  name: "Crime Records"
+
+  en: |
+    This database contains information about criminal perpetrators and incidents.
+    It is designed for managing and querying criminal perpetrators and incidents.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о criminal perpetrators and incidents.
+    Она предназначена для управления и запросов данных о criminal perpetrators and incidents.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+pets_1:
+  name: "Pet Care"
+
+  en: |
+    This database contains information about pets, owners, and veterinary visits.
+    It is designed for managing and querying pets, owners, and veterinary visits.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о pets, owners, and veterinary visits.
+    Она предназначена для управления и запросов данных о pets, owners, and veterinary visits.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+phone_1:
+  name: "Phone Directory"
+
+  en: |
+    This database contains information about phone contacts and call records.
+    It is designed for managing and querying phone contacts and call records.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о phone contacts and call records.
+    Она предназначена для управления и запросов данных о phone contacts and call records.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+phone_market:
+  name: "Phone Market"
+
+  en: |
+    This database contains information about phone products, manufacturers, and sales.
+    It is designed for managing and querying phone products, manufacturers, and sales.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о phone products, manufacturers, and sales.
+    Она предназначена для управления и запросов данных о phone products, manufacturers, and sales.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+pilot_record:
+  name: "Pilot Records"
+
+  en: |
+    This database contains information about pilot information and flight experience.
+    It is designed for managing and querying pilot information and flight experience.
+    
+    **Purpose:**
+    - Track vehicles, routes, and schedules
+    - Manage fleet and maintenance records
+    - Store location and station data
+    
+    **Typical queries:**
+    - Find routes by origin and destination
+    - Get vehicle maintenance history
+    - Analyze schedule adherence and delays
+
+  ru: |
+    Эта база данных содержит информацию о pilot information and flight experience.
+    Она предназначена для управления и запросов данных о pilot information and flight experience.
+    
+    **Назначение:**
+    - Отслеживать транспортные средства, маршруты и расписания
+    - Управлять парком и записями о техническом обслуживании
+    - Хранить данные о местоположении и станциях
+    
+    **Типичные запросы:**
+    - Найти маршруты по пункту отправления и назначения
+    - Получить историю обслуживания транспортных средств
+    - Анализировать соблюдение расписания и задержки
+
+poker_player:
+  name: "Poker Players"
+
+  en: |
+    This database contains information about poker tournaments and player earnings.
+    It is designed for managing and querying poker tournaments and player earnings.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о poker tournaments and player earnings.
+    Она предназначена для управления и запросов данных о poker tournaments and player earnings.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+product_catalog:
+  name: "Product Inventory"
+
+  en: |
+    This database contains information about product catalog, suppliers, and inventory.
+    It is designed for managing and querying product catalog, suppliers, and inventory.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о product catalog, suppliers, and inventory.
+    Она предназначена для управления и запросов данных о product catalog, suppliers, and inventory.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+products_for_hire:
+  name: "Product Rental"
+
+  en: |
+    This database contains information about product rental inventory and customer bookings.
+    It is designed for managing and querying product rental inventory and customer bookings.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о product rental inventory and customer bookings.
+    Она предназначена для управления и запросов данных о product rental inventory and customer bookings.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+products_gen_characteristics:
+  name: "Product Catalog"
+
+  en: |
+    This database contains information about product characteristics and specifications.
+    It is designed for managing and querying product characteristics and specifications.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о product characteristics and specifications.
+    Она предназначена для управления и запросов данных о product characteristics and specifications.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+program_share:
+  name: "Program Sharing"
+
+  en: |
+    This database contains information about program distribution and usage.
+    It is designed for managing and querying program distribution and usage.
+    
+    **Purpose:**
+    - Track accounts, transactions, and balances
+    - Manage loans and investments
+    - Store customer financial data
+    
+    **Typical queries:**
+    - Find accounts by type or balance
+    - Get transaction history for accounts
+    - Analyze portfolio performance
+
+  ru: |
+    Эта база данных содержит информацию о program distribution and usage.
+    Она предназначена для управления и запросов данных о program distribution and usage.
+    
+    **Назначение:**
+    - Отслеживать счета, транзакции и балансы
+    - Управлять кредитами и инвестициями
+    - Хранить финансовые данные клиентов
+    
+    **Типичные запросы:**
+    - Найти счета по типу или балансу
+    - Получить историю транзакций по счетам
+    - Анализировать производительность портфеля
+
+protein_institute:
+  name: "Protein Research"
+
+  en: |
+    This database contains information about protein research and institute data.
+    It is designed for managing and querying protein research and institute data.
+    
+    **Purpose:**
+    - Store research data and experiments
+    - Track scientists and publications
+    - Manage laboratory information
+    
+    **Typical queries:**
+    - Find research by topic or scientist
+    - Get experiment results and analysis
+    - Analyze publication citations
+
+  ru: |
+    Эта база данных содержит информацию о protein research and institute data.
+    Она предназначена для управления и запросов данных о protein research and institute data.
+    
+    **Назначение:**
+    - Хранить исследовательские данные и эксперименты
+    - Отслеживать учёных и публикации
+    - Управлять лабораторной информацией
+    
+    **Типичные запросы:**
+    - Найти исследования по теме или учёному
+    - Получить результаты и анализ экспериментов
+    - Анализировать цитирования публикаций
+
+race_track:
+  name: "Horse Racing"
+
+  en: |
+    This database contains information about horse racing tracks, horses, and jockeys.
+    It is designed for managing and querying horse racing tracks, horses, and jockeys.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о horse racing tracks, horses, and jockeys.
+    Она предназначена для управления и запросов данных о horse racing tracks, horses, and jockeys.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+railway:
+  name: "Railway System"
+
+  en: |
+    This database contains information about railway stations, trains, and schedules.
+    It is designed for managing and querying railway stations, trains, and schedules.
+    
+    **Purpose:**
+    - Track vehicles, routes, and schedules
+    - Manage fleet and maintenance records
+    - Store location and station data
+    
+    **Typical queries:**
+    - Find routes by origin and destination
+    - Get vehicle maintenance history
+    - Analyze schedule adherence and delays
+
+  ru: |
+    Эта база данных содержит информацию о railway stations, trains, and schedules.
+    Она предназначена для управления и запросов данных о railway stations, trains, and schedules.
+    
+    **Назначение:**
+    - Отслеживать транспортные средства, маршруты и расписания
+    - Управлять парком и записями о техническом обслуживании
+    - Хранить данные о местоположении и станциях
+    
+    **Типичные запросы:**
+    - Найти маршруты по пункту отправления и назначения
+    - Получить историю обслуживания транспортных средств
+    - Анализировать соблюдение расписания и задержки
+
+real_estate_properties:
+  name: "Real Estate"
+
+  en: |
+    This database contains information about property listings, agents, and sales.
+    It is designed for managing and querying property listings, agents, and sales.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о property listings, agents, and sales.
+    Она предназначена для управления и запросов данных о property listings, agents, and sales.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+riding_club:
+  name: "Equestrian Club"
+
+  en: |
+    This database contains information about riding club members, horses, and competitions.
+    It is designed for managing and querying riding club members, horses, and competitions.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о riding club members, horses, and competitions.
+    Она предназначена для управления и запросов данных о riding club members, horses, and competitions.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+roller_coaster:
+  name: "Roller Coasters"
+
+  en: |
+    This database contains information about roller coaster specifications and parks.
+    It is designed for managing and querying roller coaster specifications and parks.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о roller coaster specifications and parks.
+    Она предназначена для управления и запросов данных о roller coaster specifications and parks.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+sakila_1:
+  name: "DVD Rental"
+
+  en: |
+    This database contains information about DVD rental store, movies, and customers.
+    It is designed for managing and querying DVD rental store, movies, and customers.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о DVD rental store, movies, and customers.
+    Она предназначена для управления и запросов данных о DVD rental store, movies, and customers.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+scholar:
+  name: "Scholarship Management"
+
+  en: |
+    This database contains information about scholarships, applicants, and award recipients.
+    It is designed for managing and querying scholarships, applicants, and award recipients.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о scholarships, applicants, and award recipients.
+    Она предназначена для управления и запросов данных о scholarships, applicants, and award recipients.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+school_bus:
+  name: "School Transportation"
+
+  en: |
+    This database contains information about school bus routes and student riders.
+    It is designed for managing and querying school bus routes and student riders.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о school bus routes and student riders.
+    Она предназначена для управления и запросов данных о school bus routes and student riders.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+school_finance:
+  name: "School Finance"
+
+  en: |
+    This database contains information about school budgets, expenses, and financial records.
+    It is designed for managing and querying school budgets, expenses, and financial records.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о school budgets, expenses, and financial records.
+    Она предназначена для управления и запросов данных о school budgets, expenses, and financial records.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+school_player:
+  name: "School Sports"
+
+  en: |
+    This database contains information about school athletes and sports participation.
+    It is designed for managing and querying school athletes and sports participation.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о school athletes and sports participation.
+    Она предназначена для управления и запросов данных о school athletes and sports participation.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+scientist_1:
+  name: "Scientist Directory"
+
+  en: |
+    This database contains information about scientists and research projects.
+    It is designed for managing and querying scientists and research projects.
+    
+    **Purpose:**
+    - Store research data and experiments
+    - Track scientists and publications
+    - Manage laboratory information
+    
+    **Typical queries:**
+    - Find research by topic or scientist
+    - Get experiment results and analysis
+    - Analyze publication citations
+
+  ru: |
+    Эта база данных содержит информацию о scientists and research projects.
+    Она предназначена для управления и запросов данных о scientists and research projects.
+    
+    **Назначение:**
+    - Хранить исследовательские данные и эксперименты
+    - Отслеживать учёных и публикации
+    - Управлять лабораторной информацией
+    
+    **Типичные запросы:**
+    - Найти исследования по теме или учёному
+    - Получить результаты и анализ экспериментов
+    - Анализировать цитирования публикаций
+
+ship_1:
+  name: "Maritime Shipping"
+
+  en: |
+    This database contains information about ships, captains, and voyage records.
+    It is designed for managing and querying ships, captains, and voyage records.
+    
+    **Purpose:**
+    - Track vehicles, routes, and schedules
+    - Manage fleet and maintenance records
+    - Store location and station data
+    
+    **Typical queries:**
+    - Find routes by origin and destination
+    - Get vehicle maintenance history
+    - Analyze schedule adherence and delays
+
+  ru: |
+    Эта база данных содержит информацию о ships, captains, and voyage records.
+    Она предназначена для управления и запросов данных о ships, captains, and voyage records.
+    
+    **Назначение:**
+    - Отслеживать транспортные средства, маршруты и расписания
+    - Управлять парком и записями о техническом обслуживании
+    - Хранить данные о местоположении и станциях
+    
+    **Типичные запросы:**
+    - Найти маршруты по пункту отправления и назначения
+    - Получить историю обслуживания транспортных средств
+    - Анализировать соблюдение расписания и задержки
+
+ship_mission:
+  name: "Naval Operations"
+
+  en: |
+    This database contains information about naval ships, missions, and commanders.
+    It is designed for managing and querying naval ships, missions, and commanders.
+    
+    **Purpose:**
+    - Track vehicles, routes, and schedules
+    - Manage fleet and maintenance records
+    - Store location and station data
+    
+    **Typical queries:**
+    - Find routes by origin and destination
+    - Get vehicle maintenance history
+    - Analyze schedule adherence and delays
+
+  ru: |
+    Эта база данных содержит информацию о naval ships, missions, and commanders.
+    Она предназначена для управления и запросов данных о naval ships, missions, and commanders.
+    
+    **Назначение:**
+    - Отслеживать транспортные средства, маршруты и расписания
+    - Управлять парком и записями о техническом обслуживании
+    - Хранить данные о местоположении и станциях
+    
+    **Типичные запросы:**
+    - Найти маршруты по пункту отправления и назначения
+    - Получить историю обслуживания транспортных средств
+    - Анализировать соблюдение расписания и задержки
+
+shop_membership:
+  name: "Shop Membership"
+
+  en: |
+    This database contains information about shop members, purchases, and membership tiers.
+    It is designed for managing and querying shop members, purchases, and membership tiers.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о shop members, purchases, and membership tiers.
+    Она предназначена для управления и запросов данных о shop members, purchases, and membership tiers.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+singer:
+  name: "Singer Database"
+
+  en: |
+    This database contains information about singers, songs, and album information.
+    It is designed for managing and querying singers, songs, and album information.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о singers, songs, and album information.
+    Она предназначена для управления и запросов данных о singers, songs, and album information.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+small_bank_1:
+  name: "Banking System"
+
+  en: |
+    This database contains information about bank accounts, customers, and transactions.
+    It is designed for managing and querying bank accounts, customers, and transactions.
+    
+    **Purpose:**
+    - Track accounts, transactions, and balances
+    - Manage loans and investments
+    - Store customer financial data
+    
+    **Typical queries:**
+    - Find accounts by type or balance
+    - Get transaction history for accounts
+    - Analyze portfolio performance
+
+  ru: |
+    Эта база данных содержит информацию о bank accounts, customers, and transactions.
+    Она предназначена для управления и запросов данных о bank accounts, customers, and transactions.
+    
+    **Назначение:**
+    - Отслеживать счета, транзакции и балансы
+    - Управлять кредитами и инвестициями
+    - Хранить финансовые данные клиентов
+    
+    **Типичные запросы:**
+    - Найти счета по типу или балансу
+    - Получить историю транзакций по счетам
+    - Анализировать производительность портфеля
+
+soccer_1:
+  name: "Soccer League"
+
+  en: |
+    This database contains information about soccer teams, players, and match statistics.
+    It is designed for managing and querying soccer teams, players, and match statistics.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о soccer teams, players, and match statistics.
+    Она предназначена для управления и запросов данных о soccer teams, players, and match statistics.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+soccer_2:
+  name: "Soccer Competition"
+
+  en: |
+    This database contains information about soccer competitions and team performance.
+    It is designed for managing and querying soccer competitions and team performance.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о soccer competitions and team performance.
+    Она предназначена для управления и запросов данных о soccer competitions and team performance.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+solvency_ii:
+  name: "Insurance Compliance"
+
+  en: |
+    This database contains information about insurance solvency regulations and reporting.
+    It is designed for managing and querying insurance solvency regulations and reporting.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о insurance solvency regulations and reporting.
+    Она предназначена для управления и запросов данных о insurance solvency regulations and reporting.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+sports_competition:
+  name: "Sports Events"
+
+  en: |
+    This database contains information about sports competitions and athlete results.
+    It is designed for managing and querying sports competitions and athlete results.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о sports competitions and athlete results.
+    Она предназначена для управления и запросов данных о sports competitions and athlete results.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+station_weather:
+  name: "Weather Stations"
+
+  en: |
+    This database contains information about weather stations and meteorological data.
+    It is designed for managing and querying weather stations and meteorological data.
+    
+    **Purpose:**
+    - Track vehicles, routes, and schedules
+    - Manage fleet and maintenance records
+    - Store location and station data
+    
+    **Typical queries:**
+    - Find routes by origin and destination
+    - Get vehicle maintenance history
+    - Analyze schedule adherence and delays
+
+  ru: |
+    Эта база данных содержит информацию о weather stations and meteorological data.
+    Она предназначена для управления и запросов данных о weather stations and meteorological data.
+    
+    **Назначение:**
+    - Отслеживать транспортные средства, маршруты и расписания
+    - Управлять парком и записями о техническом обслуживании
+    - Хранить данные о местоположении и станциях
+    
+    **Типичные запросы:**
+    - Найти маршруты по пункту отправления и назначения
+    - Получить историю обслуживания транспортных средств
+    - Анализировать соблюдение расписания и задержки
+
+store_1:
+  name: "Retail Store"
+
+  en: |
+    This database contains information about store products, customers, and sales transactions.
+    It is designed for managing and querying store products, customers, and sales transactions.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о store products, customers, and sales transactions.
+    Она предназначена для управления и запросов данных о store products, customers, and sales transactions.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+store_product:
+  name: "Store Inventory"
+
+  en: |
+    This database contains information about store products, suppliers, and stock levels.
+    It is designed for managing and querying store products, suppliers, and stock levels.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о store products, suppliers, and stock levels.
+    Она предназначена для управления и запросов данных о store products, suppliers, and stock levels.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+storm_record:
+  name: "Storm Records"
+
+  en: |
+    This database contains information about storm events and damage records.
+    It is designed for managing and querying storm events and damage records.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о storm events and damage records.
+    Она предназначена для управления и запросов данных о storm events and damage records.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+student_1:
+  name: "Student Records"
+
+  en: |
+    This database contains information about student information and academic standing.
+    It is designed for managing and querying student information and academic standing.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о student information and academic standing.
+    Она предназначена для управления и запросов данных о student information and academic standing.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+student_assessment:
+  name: "Student Assessment"
+
+  en: |
+    This database contains information about student tests, assessments, and outcomes.
+    It is designed for managing and querying student tests, assessments, and outcomes.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о student tests, assessments, and outcomes.
+    Она предназначена для управления и запросов данных о student tests, assessments, and outcomes.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+student_transcripts_tracking:
+  name: "Transcript Management"
+
+  en: |
+    This database contains information about student transcripts and academic records.
+    It is designed for managing and querying student transcripts and academic records.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о student transcripts and academic records.
+    Она предназначена для управления и запросов данных о student transcripts and academic records.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+swimming:
+  name: "Swimming Competition"
+
+  en: |
+    This database contains information about swimming events, swimmers, and records.
+    It is designed for managing and querying swimming events, swimmers, and records.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о swimming events, swimmers, and records.
+    Она предназначена для управления и запросов данных о swimming events, swimmers, and records.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+theme_gallery:
+  name: "Art Gallery"
+
+  en: |
+    This database contains information about art exhibitions, artists, and gallery operations.
+    It is designed for managing and querying art exhibitions, artists, and gallery operations.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о art exhibitions, artists, and gallery operations.
+    Она предназначена для управления и запросов данных о art exhibitions, artists, and gallery operations.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+tracking_grants_for_research:
+  name: "Grant Management"
+
+  en: |
+    This database contains information about research grants and funding.
+    It is designed for managing and querying research grants and funding.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о research grants and funding.
+    Она предназначена для управления и запросов данных о research grants and funding.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+tracking_orders:
+  name: "Order Management"
+
+  en: |
+    This database contains information about order processing and fulfillment.
+    It is designed for managing and querying order processing and fulfillment.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о order processing and fulfillment.
+    Она предназначена для управления и запросов данных о order processing and fulfillment.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+tracking_share_transactions:
+  name: "Share Trading"
+
+  en: |
+    This database contains information about stock transactions and holdings.
+    It is designed for managing and querying stock transactions and holdings.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о stock transactions and holdings.
+    Она предназначена для управления и запросов данных о stock transactions and holdings.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+tracking_software_problems:
+  name: "Issue Tracking"
+
+  en: |
+    This database contains information about software bugs and fixes.
+    It is designed for managing and querying software bugs and fixes.
+    
+    **Purpose:**
+    - Track devices, networks, and infrastructure
+    - Manage documents and version control
+    - Record maintenance and support tickets
+    
+    **Typical queries:**
+    - Find devices by type or status
+    - Get document versions and history
+    - Analyze system performance and issues
+
+  ru: |
+    Эта база данных содержит информацию о software bugs and fixes.
+    Она предназначена для управления и запросов данных о software bugs and fixes.
+    
+    **Назначение:**
+    - Отслеживать устройства, сети и инфраструктуру
+    - Управлять документами и контролем версий
+    - Записывать заявки на обслуживание и поддержку
+    
+    **Типичные запросы:**
+    - Найти устройства по типу или статусу
+    - Получить версии документов и историю
+    - Анализировать производительность системы и проблемы
+
+train_station:
+  name: "Train Stations"
+
+  en: |
+    This database contains information about train station connections and routes.
+    It is designed for managing and querying train station connections and routes.
+    
+    **Purpose:**
+    - Track vehicles, routes, and schedules
+    - Manage fleet and maintenance records
+    - Store location and station data
+    
+    **Typical queries:**
+    - Find routes by origin and destination
+    - Get vehicle maintenance history
+    - Analyze schedule adherence and delays
+
+  ru: |
+    Эта база данных содержит информацию о train station connections and routes.
+    Она предназначена для управления и запросов данных о train station connections and routes.
+    
+    **Назначение:**
+    - Отслеживать транспортные средства, маршруты и расписания
+    - Управлять парком и записями о техническом обслуживании
+    - Хранить данные о местоположении и станциях
+    
+    **Типичные запросы:**
+    - Найти маршруты по пункту отправления и назначения
+    - Получить историю обслуживания транспортных средств
+    - Анализировать соблюдение расписания и задержки
+
+tvshow:
+  name: "TV Shows"
+
+  en: |
+    This database contains information about television shows, episodes, and ratings.
+    It is designed for managing and querying television shows, episodes, and ratings.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о television shows, episodes, and ratings.
+    Она предназначена для управления и запросов данных о television shows, episodes, and ratings.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+twitter_1:
+  name: "Social Media"
+
+  en: |
+    This database contains information about Twitter users, tweets, and followers.
+    It is designed for managing and querying Twitter users, tweets, and followers.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о Twitter users, tweets, and followers.
+    Она предназначена для управления и запросов данных о Twitter users, tweets, and followers.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+university_basketball:
+  name: "University Basketball"
+
+  en: |
+    This database contains information about university basketball teams and players.
+    It is designed for managing and querying university basketball teams and players.
+    
+    **Purpose:**
+    - Store student and faculty information
+    - Track courses, grades, and academic performance
+    - Manage enrollment and transcripts
+    
+    **Typical queries:**
+    - Find students by major or enrollment status
+    - Get course information and prerequisites
+    - Analyze grade distributions and GPA
+
+  ru: |
+    Эта база данных содержит информацию о university basketball teams and players.
+    Она предназначена для управления и запросов данных о university basketball teams and players.
+    
+    **Назначение:**
+    - Хранить информацию о студентах и преподавателях
+    - Отслеживать курсы, оценки и академическую успеваемость
+    - Управлять зачислением и академическими справками
+    
+    **Типичные запросы:**
+    - Найти студентов по специальности или статусу
+    - Получить информацию о курсах и требованиях
+    - Анализировать распределение оценок и средний балл
+
+voter_1:
+  name: "Voter Registration"
+
+  en: |
+    This database contains information about voter registration and election participation.
+    It is designed for managing and querying voter registration and election participation.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о voter registration and election participation.
+    Она предназначена для управления и запросов данных о voter registration and election participation.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+voter_2:
+  name: "Voter Database"
+
+  en: |
+    This database contains information about voter information and voting history.
+    It is designed for managing and querying voter information and voting history.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о voter information and voting history.
+    Она предназначена для управления и запросов данных о voter information and voting history.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+wedding:
+  name: "Wedding Events"
+
+  en: |
+    This database contains information about wedding planning, arrangements, and guest management.
+    It is designed for managing and querying wedding planning, arrangements, and guest management.
+    
+    **Purpose:**
+    - Track event details and scheduling
+    - Manage participant registration and attendance
+    - Record event outcomes and feedback
+    
+    **Typical queries:**
+    - Find events by type or date range
+    - Get participant lists for specific events
+    - Analyze attendance patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о wedding planning, arrangements, and guest management.
+    Она предназначена для управления и запросов данных о wedding planning, arrangements, and guest management.
+    
+    **Назначение:**
+    - Отслеживать детали событий и расписание
+    - Управлять регистрацией участников и посещаемостью
+    - Записывать результаты событий и обратную связь
+    
+    **Типичные запросы:**
+    - Найти события по типу или диапазону дат
+    - Получить списки участников для конкретных событий
+    - Анализировать паттерны посещаемости и тенденции
+
+wine_1:
+  name: "Wine 1 Database"
+
+  en: |
+    This database contains information about default data.
+    It is designed for managing and querying default data.
+    
+    **Purpose:**
+    - Store and organize structured data
+    - Track relationships between entities
+    - Support data retrieval and reporting
+    
+    **Typical queries:**
+    - Find records by specific criteria
+    - Get related data across tables
+    - Analyze data patterns and trends
+
+  ru: |
+    Эта база данных содержит информацию о default data.
+    Она предназначена для управления и запросов данных о default data.
+    
+    **Назначение:**
+    - Хранить и организовывать структурированные данные
+    - Отслеживать взаимосвязи между сущностями
+    - Поддерживать извлечение данных и отчетность
+    
+    **Типичные запросы:**
+    - Найти записи по определённым критериям
+    - Получить связанные данные из нескольких таблиц
+    - Анализировать паттерны и тенденции данных
+
+workshop_paper:
+  name: "Academic Workshops"
+
+  en: |
+    This database contains information about research workshops, papers, and authors.
+    It is designed for managing and querying research workshops, papers, and authors.
+    
+    **Purpose:**
+    - Manage products, customers, and transactions
+    - Track inventory and supply chain
+    - Record sales and financial data
+    
+    **Typical queries:**
+    - Find products by category or supplier
+    - Get customer purchase history
+    - Analyze sales trends and revenue
+
+  ru: |
+    Эта база данных содержит информацию о research workshops, papers, and authors.
+    Она предназначена для управления и запросов данных о research workshops, papers, and authors.
+    
+    **Назначение:**
+    - Управлять продуктами, клиентами и транзакциями
+    - Отслеживать запасы и цепочку поставок
+    - Записывать данные о продажах и финансах
+    
+    **Типичные запросы:**
+    - Найти продукты по категории или поставщику
+    - Получить историю покупок клиента
+    - Анализировать тенденции продаж и выручку
+
+world_1:
+  name: "World Database"
+
+  en: |
+    This database contains information about countries, cities, and geographic data.
+    It is designed for managing and querying countries, cities, and geographic data.
+    
+    **Purpose:**
+    - Store citizen and voter information
+    - Track government services and departments
+    - Record election and voting data
+    
+    **Typical queries:**
+    - Find citizens by district or registration
+    - Get government service information
+    - Analyze voting patterns and results
+
+  ru: |
+    Эта база данных содержит информацию о countries, cities, and geographic data.
+    Она предназначена для управления и запросов данных о countries, cities, and geographic data.
+    
+    **Назначение:**
+    - Хранить информацию о гражданах и избирателях
+    - Отслеживать государственные услуги и департаменты
+    - Записывать данные о выборах и голосовании
+    
+    **Типичные запросы:**
+    - Найти граждан по округу или регистрации
+    - Получить информацию о государственных услугах
+    - Анализировать паттерны и результаты голосования
+
+wrestler:
+  name: "Wrestling"
+
+  en: |
+    This database contains information about wrestling matches and wrestler records.
+    It is designed for managing and querying wrestling matches and wrestler records.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о wrestling matches and wrestler records.
+    Она предназначена для управления и запросов данных о wrestling matches and wrestler records.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+wta_1:
+  name: "Tennis Tour"
+
+  en: |
+    This database contains information about WTA tennis tournaments and player rankings.
+    It is designed for managing and querying WTA tennis tournaments and player rankings.
+    
+    **Purpose:**
+    - Track teams, players, and match results
+    - Store competition schedules and venues
+    - Record player statistics and achievements
+    
+    **Typical queries:**
+    - Find teams or players by statistics
+    - Get match schedules and results
+    - Analyze team or player performance
+
+  ru: |
+    Эта база данных содержит информацию о WTA tennis tournaments and player rankings.
+    Она предназначена для управления и запросов данных о WTA tennis tournaments and player rankings.
+    
+    **Назначение:**
+    - Отслеживать команды, игроков и результаты матчей
+    - Хранить расписания соревнований и места проведения
+    - Записывать статистику и достижения игроков
+    
+    **Типичные запросы:**
+    - Найти команды или игроков по статистике
+    - Получить расписание и результаты матчей
+    - Анализировать производительность команды или игрока
+
+yelp:
+  name: "Business Reviews"
+
+  en: |
+    This database contains information about business listings, reviews, and ratings.
+    It is designed for managing and querying business listings, reviews, and ratings.
+    
+    **Purpose:**
+    - Store movie, TV show, and music information
+    - Track ratings, reviews, and awards
+    - Manage cast and crew data
+    
+    **Typical queries:**
+    - Find movies by genre or actor
+    - Get ratings and reviews for content
+    - Analyze box office or viewership trends
+
+  ru: |
+    Эта база данных содержит информацию о business listings, reviews, and ratings.
+    Она предназначена для управления и запросов данных о business listings, reviews, and ratings.
+    
+    **Назначение:**
+    - Хранить информацию о фильмах, ТВ-шоу и музыке
+    - Отслеживать рейтинги, отзывы и награды
+    - Управлять данными о актёрах и съёмочной группе
+    
+    **Типичные запросы:**
+    - Найти фильмы по жанру или актёру
+    - Получить рейтинги и отзывы о контенте
+    - Анализировать кассовые сборы или просмотры
+
+
+# Default version to use
+default_version: "v1"

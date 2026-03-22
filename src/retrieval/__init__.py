@@ -1,10 +1,7 @@
-"""Retrieval модули."""
-# Lazy imports для избежания циклических импортов
+"""Retrieval modules."""
+# Lazy imports to avoid circular imports
 __all__ = [
     "SchemaEmbedder",
-    "SchemaRetriever",
-    "HybridSchemaRetriever",
-    "CrossEncoderReranker",
     "QdrantVectorDB",
     "TableDocument",
     "Neo4jGraphDB",
@@ -12,6 +9,9 @@ __all__ = [
     "TableNode",
     "SchemaCompressor",
     "CompactTableInfo",
+    "HybridSchemaRetriever",
+    "CrossEncoderReranker",
+    "LegacySchemaRetriever",
 ]
 
 
@@ -19,15 +19,6 @@ def __getattr__(name):
     if name == "SchemaEmbedder":
         from .embedder import SchemaEmbedder
         return SchemaEmbedder
-    elif name == "SchemaRetriever":
-        from .schema_retriever import SchemaRetriever
-        return SchemaRetriever
-    elif name == "HybridSchemaRetriever":
-        from .schema_retriever import HybridSchemaRetriever
-        return HybridSchemaRetriever
-    elif name == "CrossEncoderReranker":
-        from .schema_retriever import CrossEncoderReranker
-        return CrossEncoderReranker
     elif name == "QdrantVectorDB":
         from .vector_db import QdrantVectorDB
         return QdrantVectorDB
@@ -49,4 +40,13 @@ def __getattr__(name):
     elif name == "CompactTableInfo":
         from .schema_compressor import CompactTableInfo
         return CompactTableInfo
+    elif name == "HybridSchemaRetriever":
+        from .schema_retriever import HybridSchemaRetriever
+        return HybridSchemaRetriever
+    elif name == "CrossEncoderReranker":
+        from .schema_retriever import CrossEncoderReranker
+        return CrossEncoderReranker
+    elif name == "LegacySchemaRetriever":
+        from .schema_retriever import LegacySchemaRetriever
+        return LegacySchemaRetriever
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

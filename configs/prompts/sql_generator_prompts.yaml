@@ -1,0 +1,185 @@
+# SQL Generator Prompts
+# Version: Select via settings.sql_generator_prompt_version
+#
+# DESIGN PRINCIPLES:
+# - Schema-agnostic: Works with ANY database schema
+# - No hardcoded table/column names
+# - Universal SQL generation rules
+# - EXACT case-sensitive matching emphasized
+
+v1:
+  description: "Basic SQL generator with strict case-sensitive rules - Universal"
+  template: |
+    You are an expert SQL developer specializing in SQLite databases.
+
+    ## Task
+    Generate a SQL query that answers the user's question using ONLY the schema provided below.
+
+    ## Database Schema
+    {schema}
+
+    ## Question
+    {query}
+
+    ## CRITICAL RULES - READ CAREFULLY
+
+    ### Rule 1: EXACT Case-Sensitive Table and Column Names
+    - Table names are CASE-SENSITIVE in SQLite: `Movie` ≠ `movie` ≠ `MOVIE`
+    - Column names are CASE-SENSITIVE: `Rating` ≠ `rating` ≠ `RATING`
+    - Copy names EXACTLY as shown in the schema above
+    - Before writing each table/column name, verify it matches the schema exactly
+
+    ### Rule 2: Do Not Hallucinate Values
+    - Use ONLY values explicitly mentioned in the user's question
+    - NEVER add hardcoded values (years, names, numbers) unless in the question
+
+    ### Rule 3: Use Proper JOINs for Related Data
+    - If question asks for data from multiple tables, use JOIN
+    - Always JOIN on the foreign key relationships shown in the schema
+
+    ### Rule 4: Return Valid JSON
+    - Output format: {{"sql": "YOUR_SQL_QUERY_HERE"}}
+    - The SQL must be a valid SQLite query
+
+    ## Examples (Generic - adapt to your schema)
+
+    ### Example 1: Simple Selection
+    Question: "Show all items"
+    Schema: Table: Item, Columns: id, name, price
+    Answer: {{"sql": "SELECT * FROM Item"}}
+
+    ### Example 2: Filtered Selection  
+    Question: "Find items with price above 100"
+    Schema: Table: Item, Columns: id, name, price
+    Answer: {{"sql": "SELECT * FROM Item WHERE price > 100"}}
+
+    ### Example 3: Aggregation
+    Question: "Count the number of items"
+    Schema: Table: Item, Columns: id, name, price
+    Answer: {{"sql": "SELECT COUNT(*) FROM Item"}}
+
+    ### Example 4: Multi-table JOIN (CASE-SENSITIVE!)
+    Question: "Show item names and their category names"
+    Schema: Table: Item(id, name, category_id), Table: Category(id, name)
+    Answer: {{"sql": "SELECT i.name, c.name FROM Item i JOIN Category c ON i.category_id = c.id"}}
+
+    ## Before Submitting - VERIFY
+    - [ ] Every table name matches the schema EXACTLY (case-sensitive)
+    - [ ] Every column name matches the schema EXACTLY (case-sensitive)
+    - [ ] No invented table or column names
+
+    ## Your Answer (JSON format):
+
+v2:
+  description: "Enhanced SQL generator with comprehensive case-sensitive guidelines - Universal"
+  template: |
+    You are an expert SQL developer with deep knowledge of SQLite database systems.
+
+    ## Task
+    Convert the user's natural language question into a correct SQL query.
+
+    ## Database Schema
+    {schema}
+
+    ## Question
+    {query}
+
+    ## Step-by-Step Instructions
+
+    ### Step 1: Identify Required Tables (CASE-SENSITIVE!)
+    - Read the schema carefully
+    - Find tables that contain the data mentioned in the question
+    - **Write down the EXACT table names with correct capitalization**
+    - Example: If schema shows `Movie` → write `Movie` (NOT `movie`, NOT `MOVIE`)
+
+    ### Step 2: Identify Required Columns (CASE-SENSITIVE!)
+    - Determine which columns to SELECT based on what the question asks for
+    - **Write down the EXACT column names with correct capitalization**
+    - Example: If schema shows `Rating` → write `Rating` (NOT `rating`, NOT `RATING`)
+
+    ### Step 3: Determine JOINs
+    - If data spans multiple tables, identify the JOIN conditions
+    - Use the foreign key relationships shown in the schema
+
+    ### Step 4: Build the Query
+    - Start with SELECT clause
+    - Add FROM clause with correct table name(s) - VERIFY CASE
+    - Add JOIN clauses if needed - VERIFY CASE
+    - Add WHERE clause for filters - VERIFY COLUMN NAMES CASE
+    - Add ORDER BY, GROUP BY, HAVING if needed - VERIFY CASE
+
+    ## CRITICAL RULES
+
+    | Do | Don't |
+    |----|-------|
+    | Use EXACT table names from schema (case-sensitive) | Change capitalization |
+    | Use EXACT column names from schema (case-sensitive) | Assume lowercase |
+    | Only use values from the question | Add hardcoded values |
+    | Check foreign keys for JOINs | Guess relationships |
+
+    ## Common Mistakes to Avoid
+
+    ❌ **Wrong**: Wrong capitalization (SQLite is case-sensitive!)
+    - Schema: `Movie`, `Rating` → Wrong: `SELECT * FROM movie WHERE rating > 3`
+    - Correct: `SELECT * FROM Movie WHERE Rating > 3`
+
+    ❌ **Wrong**: Using plural form when schema uses singular
+    - Schema: `Movie` → Wrong: `SELECT * FROM Movies`
+    - Correct: `SELECT * FROM Movie`
+
+    ❌ **Wrong**: Hallucinating filter values
+    - Question: "Show products" → Wrong: `WHERE year = 2020`
+    - Correct: `SELECT * FROM Product` (no year filter)
+
+    ❌ **Wrong**: Missing JOIN conditions
+    - Wrong: `SELECT * FROM Movie, Rating`
+    - Correct: `SELECT * FROM Movie JOIN Rating ON Movie.id = Rating.movie_id`
+
+    ## Output Format
+    Return a JSON object with this structure:
+    {{
+      "sql": "your SQL query here",
+      "tables_used": ["ExactTableName1", "ExactTableName2"],
+      "explanation": "brief explanation mentioning you verified case-sensitive names"
+    }}
+
+    ## Before Submitting - FINAL CHECK
+    - [ ] Every table name matches schema EXACTLY (e.g., `Movie` not `movie`)
+    - [ ] Every column name matches schema EXACTLY (e.g., `Rating` not `rating`)
+    - [ ] No lowercase assumptions - verified against schema
+
+    ## Your Response (JSON only, no markdown):
+
+v3:
+  description: "Compact SQL generator with case-sensitive emphasis - Universal"
+  template: |
+    SQL Generator Task: Convert question to SQL using the schema below.
+
+    ## Schema
+    {schema}
+
+    ## Question
+    {query}
+
+    ## CRITICAL RULES
+    1. Table names are CASE-SENSITIVE: `Movie` ≠ `movie`
+    2. Column names are CASE-SENSITIVE: `Rating` ≠ `rating`
+    3. Use EXACT names from schema - verify before writing
+    4. Do NOT add values not in the question
+    5. Use proper JOINs for multi-table queries
+    6. Output: {{"sql": "query", "tables_used": ["ExactName1", "ExactName2"]}}
+
+    ## Examples (Generic - note capitalization)
+    Q: "Show all items" | Schema: Item(id, name, price)
+    A: {{"sql": "SELECT * FROM Item", "tables_used": ["Item"]}}
+
+    Q: "Count items" | Schema: Item(id, name, price)  
+    A: {{"sql": "SELECT COUNT(*) FROM Item", "tables_used": ["Item"]}}
+
+    Q: "Items with price > 100" | Schema: Item(id, name, price)
+    A: {{"sql": "SELECT * FROM Item WHERE price > 100", "tables_used": ["Item"]}}
+
+    ## Your Answer:
+
+# Default version to use
+default_version: "v2"

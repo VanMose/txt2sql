@@ -1,4 +1,4 @@
-# Docker Compose для Text-to-SQL Pipeline v0.1.0
+# Docker Compose для Text-to-SQL Pipeline v0.1.5
 # Запуск: docker-compose up -d
 # Остановка: docker-compose down
 
@@ -21,6 +21,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - text2sql-network
 
   qdrant:
     image: qdrant/qdrant:v1.17.0
@@ -35,11 +37,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - text2sql-network
 
 volumes:
   neo4j_data:
   qdrant_storage:
 
 networks:
-  default:
-    name: text2sql-network
+  text2sql-network:
+    driver: bridge

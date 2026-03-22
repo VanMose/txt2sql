@@ -1,6 +1,6 @@
 # app\components\metrics_panel.py
 """
-Metrics Panel компонент для Text-to-SQL v0.1.4
+Metrics Panel компонент для Text-to-SQL v0.1.5
 
 Production metrics:
 - Query latency (p50, p95, p99)

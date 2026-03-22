@@ -1,6 +1,6 @@
 # app\main.py
 """
-Streamlit UI для Text-to-SQL пайплайна v0.1.4.
+Streamlit UI для Text-to-SQL пайплайна v0.1.5.
 
 Production features:
 - Hybrid Retrieval (Vector + Graph)
@@ -179,16 +179,10 @@ def main() -> None:
     """Main application."""
     logger.info("Starting Streamlit app")
 
-    st.title("🗄️ Text-to-SQL v0.1.4")
+    st.title("🗄️ Text-to-SQL v0.1.5")
     st.markdown(
         """
     **Production система** преобразования естественного языка в SQL:
-    - ⚡ **Hybrid Retrieval**: Vector (Qdrant) + Graph (Neo4j)
-    - 🎯 **Query Understanding**: Intent, entities, filters
-    - 🔄 **Cross-encoder Reranking**: Точный выбор таблиц
-    - 📐 **Schema Compression**: Формат с PK/FK/types
-    - ✅ **SQL Validation**: Валидация перед выполнением
-    - 💾 **TTL Cache**: Ускорение повторных запросов
     """
     )
 
@@ -294,7 +288,7 @@ def main() -> None:
         )
 
     with col3:
-        st.caption("**v0.1.4** | Production Pipeline")
+        st.caption("**v0.1.5** | Production Pipeline")
     
     with col4:
         # Pipeline status

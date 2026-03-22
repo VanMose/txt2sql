@@ -7,11 +7,13 @@ Router Agent для выбора релевантных баз данных с �
 2. Prefetch схем (параллельная загрузка)
 3. Parallel execution (асинхронные операции)
 4. Early exit для простых запросов
+5. Query Understanding integration для лучшего роутинга
 
 Использует комбинацию:
 1. Vector DB (Qdrant) для семантического поиска
 2. Graph DB (Neo4j) для анализа связей
 3. LLM для финального ранжирования
+4. Query Understanding для intent-based routing
 
 Example:
     >>> from agents.router_agent import RouterAgent
@@ -32,6 +34,7 @@ from src.llm.prompts import Prompts
 from src.retrieval.graph_db import Neo4jGraphDB
 from src.retrieval.vector_db import QdrantVectorDB, TableDocument
 from src.utils.json_parser import parse_json
+from src.agents.query_understanding import QueryUnderstandingAgent, QueryUnderstanding
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +84,7 @@ class RouterAgent:
     def __init__(
         self,
         vector_db: QdrantVectorDB,
-        graph_db: Neo4jGraphDB,
+        graph_db: Optional[Neo4jGraphDB],
         llm: Optional[LLMService] = None,
         use_parallel: bool = True,
         use_semantic_cache: bool = True,
@@ -91,7 +94,7 @@ class RouterAgent:
 
         Args:
             vector_db: Vector DB для поиска.
-            graph_db: Graph DB для анализа связей.
+            graph_db: Graph DB для анализа связей (может быть None).
             llm: LLM сервис для ранжирования.
             use_parallel: Использовать параллельное выполнение.
             use_semantic_cache: Использовать semantic cache.
@@ -113,13 +116,24 @@ class RouterAgent:
         # Schema cache для prefetch
         self._schema_cache: Dict[str, str] = {}
         
+        # 🔥 Reranker инициализация
+        self._reranker = None
+        if settings.use_reranking:
+            try:
+                from src.retrieval.schema_retriever import CrossEncoderReranker
+                self._reranker = CrossEncoderReranker(model_name=settings.reranker_model)
+                logger.info(f"RouterAgent: Reranker initialized with model '{settings.reranker_model}'")
+            except Exception as e:
+                logger.warning(f"RouterAgent: Failed to initialize reranker: {e}")
+        
         # Parallel execution
         self._use_parallel = use_parallel
         self._executor = ThreadPoolExecutor(max_workers=4) if use_parallel else None
 
         logger.info(
             f"RouterAgent initialized: parallel={use_parallel}, "
-            f"semantic_cache={use_semantic_cache}"
+            f"semantic_cache={use_semantic_cache}, "
+            f"reranking={self._reranker is not None}"
         )
 
     def _generate_cache_key(self, query: str, top_k_dbs: int, top_k_tables: int) -> str:
@@ -234,8 +248,13 @@ class RouterAgent:
         return selections
 
     def _vector_search(self, query: str, top_k: int) -> List[Tuple[TableDocument, float]]:
-        """Поиск в Vector DB."""
-        return self.vector_db.search_with_reranking(query, top_k=top_k)
+        """Поиск в Vector DB с reranking."""
+        # 🔥 Передаём reranker в search_with_reranking
+        return self.vector_db.search_with_reranking(
+            query=query,
+            top_k=top_k,
+            reranker=self._reranker,
+        )
 
     def _group_by_database(
         self,
@@ -291,34 +310,37 @@ class RouterAgent:
 
         def process_db(db_name: str, group: Dict[str, Any]) -> Tuple[Dict[str, Any], Optional[str]]:
             """Обработать одну БД."""
-            # Graph analysis
+            # Graph analysis (skip if graph_db not available)
             related_tables = []
             join_paths = []
 
-            for table_name in group["tables"]:
-                try:
-                    related = self.graph_db.find_related_tables(
-                        db_name=db_name,
-                        table_name=table_name,
-                        max_depth=2
-                    )
-                    for rel in related:
-                        if rel["table_name"] not in group["tables"]:
-                            related_tables.append({
-                                "table_name": rel["table_name"],
-                                "depth": rel["depth"],
-                                "join_conditions": rel["join_conditions"],
-                            })
-
-                    if len(group["tables"]) > 1:
-                        paths = self.graph_db.find_join_path(
-                            [(db_name, t) for t in group["tables"]],
-                            max_depth=3
+            if self.graph_db:
+                for table_name in group["tables"]:
+                    try:
+                        related = self.graph_db.find_related_tables(
+                            db_name=db_name,
+                            table_name=table_name,
+                            max_depth=2
                         )
-                        join_paths.extend(paths)
+                        for rel in related:
+                            if rel["table_name"] not in group["tables"]:
+                                related_tables.append({
+                                    "table_name": rel["table_name"],
+                                    "depth": rel["depth"],
+                                    "join_conditions": rel["join_conditions"],
+                                })
 
-                except Exception as e:
-                    logger.warning(f"Graph analysis failed for {db_name}.{table_name}: {e}")
+                        if len(group["tables"]) > 1:
+                            paths = self.graph_db.find_join_path(
+                                [(db_name, t) for t in group["tables"]],
+                                max_depth=3
+                            )
+                            join_paths.extend(paths)
+
+                    except Exception as e:
+                        logger.warning(f"Graph analysis failed for {db_name}.{table_name}: {e}")
+            else:
+                logger.debug("Graph DB not available, skipping graph analysis")
 
             # Prefetch схемы
             schema = None
@@ -377,13 +399,16 @@ class RouterAgent:
         # Загрузка схемы
         schema_parts = []
         try:
-            db_tables = self.graph_db.get_all_tables(db_filter=[db_name])
-            for table in db_tables:
-                if table["table_name"] in tables or not tables:
-                    schema_parts.append(
-                        f"Table: {table['table_name']}\n"
-                        f"Columns: {', '.join(table['columns'])}"
-                    )
+            if self.graph_db:
+                db_tables = self.graph_db.get_all_tables(db_filter=[db_name])
+                for table in db_tables:
+                    if table["table_name"] in tables or not tables:
+                        schema_parts.append(
+                            f"Table: {table['table_name']}\n"
+                            f"Columns: {', '.join(table['columns'])}"
+                        )
+            else:
+                logger.debug("Graph DB not available, using empty schema")
         except Exception as e:
             logger.warning(f"Schema load failed for {db_name}: {e}")
             return ""
@@ -395,6 +420,18 @@ class RouterAgent:
     def _enrich_with_graph(self, db_groups: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Обогатить данные из Graph DB (синхронная версия)."""
         enriched: List[Dict[str, Any]] = []
+
+        if not self.graph_db:
+            logger.debug("Graph DB not available, skipping enrichment")
+            # Return db_groups without enrichment
+            for db_name, group in db_groups.items():
+                enriched.append({
+                    "db_name": db_name,
+                    "tables": group["tables"],
+                    "graph_related": [],
+                    "graph_join_paths": [],
+                })
+            return enriched
 
         for db_name, group in db_groups.items():
             related_tables: List[Dict[str, Any]] = []
@@ -507,15 +544,18 @@ class RouterAgent:
         top_k: int,
     ) -> List[DatabaseSelection]:
         """Ранжирование с помощью LLM."""
+        from ..config.settings import get_settings
+        settings = get_settings()
+        
         prompt = Prompts.format_router(query=query, databases=db_groups)
-        output = self.llm.generate(prompt, n=1, temperature=0.1)[0]
+        output = self.llm.generate(prompt, n=1, temperature=settings.temperature)[0]
 
         logger.info(f"Router LLM output: {output[:300]}...")
 
         try:
             # Попытка извлечь JSON из вывода (модель может добавлять markdown)
             json_str = output.strip()
-            
+
             # Удаляем markdown code blocks если есть
             if json_str.startswith("```json"):
                 json_str = json_str[7:]
@@ -523,9 +563,9 @@ class RouterAgent:
                 json_str = json_str[3:]
             if json_str.endswith("```"):
                 json_str = json_str[:-3]
-            
+
             json_str = json_str.strip()
-            
+
             # Попытка найти JSON в тексте
             if not json_str.startswith("{"):
                 # Ищем первое { и последнее }
@@ -533,19 +573,55 @@ class RouterAgent:
                 end_idx = json_str.rfind("}")
                 if start_idx != -1 and end_idx != -1:
                     json_str = json_str[start_idx:end_idx + 1]
-            
+
             obj: Dict[str, Any] = parse_json(json_str)
             ranked_dbs = obj.get("ranked_databases", [])
-            
+
             if not ranked_dbs:
                 logger.warning("LLM returned empty ranked_databases")
                 return self._heuristic_ranking(query, db_groups, top_k)
-            
+
             logger.info(f"Successfully parsed {len(ranked_dbs)} databases from LLM: {[db.get('db_name') for db in ranked_dbs]}")
         except Exception as e:
             logger.warning(f"Failed to parse LLM ranking: {e}")
             logger.debug(f"Raw output: {output}")
             return self._heuristic_ranking(query, db_groups, top_k)
+
+        # 🔥 ВАЛИДАЦИЯ: Проверяем, что таблицы существуют в db_groups
+        validated_dbs = []
+        for db in ranked_dbs:
+            db_name = db.get("db_name", "")
+            tables_requested = db.get("tables", [])
+
+            # Найти оригинальную группу БД
+            db_group = next((g for g in db_groups if g["db_name"] == db_name), None)
+
+            if db_group is None:
+                logger.warning(f"LLM selected non-existent database: {db_name}")
+                continue
+
+            # Проверить, что таблицы существуют
+            available_tables = db_group.get("tables", [])
+            valid_tables = [t for t in tables_requested if t in available_tables]
+            invalid_tables = [t for t in tables_requested if t not in available_tables]
+
+            if invalid_tables:
+                logger.warning(
+                    f"LLM hallucinated tables for {db_name}: "
+                    f"requested {tables_requested}, available {available_tables}, "
+                    f"invalid {invalid_tables}"
+                )
+                # Заменить на доступные таблицы
+                if valid_tables:
+                    db["tables"] = valid_tables
+                else:
+                    # Если все таблицы неверные → использовать все доступные
+                    db["tables"] = available_tables
+                    logger.info(f"Using all available tables for {db_name}: {available_tables}")
+
+            validated_dbs.append(db)
+
+        ranked_dbs = validated_dbs
 
         selections: List[DatabaseSelection] = []
         for db in ranked_dbs[:top_k]:
@@ -578,7 +654,11 @@ class RouterAgent:
                 continue
 
             # Загружаем схему
-            tables = self.graph_db.get_all_tables(db_filter=[selection.db_name])
+            if self.graph_db:
+                tables = self.graph_db.get_all_tables(db_filter=[selection.db_name])
+            else:
+                tables = []
+                logger.debug(f"Graph DB not available, cannot load schema for {selection.db_name}")
 
             if tables:
                 schema_text = f"-- Database: {selection.db_name} ({selection.db_path})\n\n"

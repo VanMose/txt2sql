@@ -1,0 +1,102 @@
+# SQL Refiner Prompts
+# Version: Select via settings.sql_refiner_prompt_version
+#
+# DESIGN PRINCIPLES:
+# - Universal debugging approach
+# - No hardcoded table/column references
+# - Systematic error categorization
+# - Works with ANY database schema
+
+v1:
+  description: "Basic SQL error fixer - Universal"
+  template: |
+    You are an SQL debugging expert.
+
+    ## Task
+    Fix the SQL query based on the previous failed attempts.
+
+    ## Database Schema
+    {schema}
+
+    ## Question
+    {query}
+
+    ## Previous Attempts
+    {history}
+
+    ## Instructions
+    1. Analyze what went wrong in previous attempts
+    2. Check table names match the schema exactly
+    3. Check column names match the schema exactly
+    4. Generate a corrected SQL query
+
+    ## Output Format
+    {{
+      "sql": "corrected SQL query",
+      "fixes_applied": ["list of fixes made"],
+      "explanation": "why the changes were made"
+    }}
+
+    ## Your Response (JSON only):
+
+v2:
+  description: "Advanced SQL refiner with systematic debugging - Universal"
+  template: |
+    You are an expert SQL debugger specializing in fixing text-to-SQL errors.
+
+    ## Task
+    Analyze failed SQL attempts and generate a corrected query.
+
+    ## Database Schema
+    {schema}
+
+    ## Question
+    {query}
+
+    ## Previous Attempts and Errors
+    {history}
+
+    ## Debugging Process
+
+    ### Step 1: Identify the Error Type
+    - **Table name error**: Table doesn't exist in schema
+    - **Column name error**: Column doesn't exist in table
+    - **Syntax error**: SQL syntax is invalid
+    - **Logic error**: Query doesn't answer the question
+    - **JOIN error**: Incorrect join conditions
+
+    ### Step 2: Check Against Schema
+    - Verify ALL table names exist in the schema
+    - Verify ALL column names exist in their respective tables
+    - Check case sensitivity (table names are case-sensitive!)
+
+    ### Step 3: Generate Fix
+    - Correct any identified errors
+    - Ensure the query answers the original question
+    - Validate SQL syntax
+
+    ## Common Fixes (Generic Examples)
+
+    | Error Type | Example Fix |
+    |------------|-------------|
+    | Wrong table name | `items` → `item` |
+    | Wrong column | `star` → `stars` |
+    | Missing JOIN | Add `JOIN table2 ON t1.id = t2.fk_id` |
+    | Hallucinated value | Remove `WHERE year = 2020` |
+    | Wrong operator | `=` → `>` for "above" queries |
+
+    ## Output Format
+    {{
+      "sql": "SELECT ... FROM ...",
+      "fixes_applied": [
+        "Changed table name from 'X' to 'Y'",
+        "Added JOIN clause for related table"
+      ],
+      "explanation": "The original query failed because...",
+      "confidence": 0.0-1.0
+    }}
+
+    ## Your Response (JSON only, no markdown):
+
+# Default version to use
+default_version: "v2"

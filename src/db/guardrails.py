@@ -6,6 +6,13 @@ SQL Guardrails — защита от опасных запросов.
 2. Авто-LIMIT — добавляет LIMIT если нет
 3. SQL Injection защита — блокирует множественные запросы
 4. Таймаут — ограничение времени выполнения
+
+Интеграция:
+    from db.guardrails import SQLGuardrails
+    
+    is_safe, result = SQLGuardrails.validate(sql)
+    if not is_safe:
+        raise ValueError(f"SQL blocked: {result}")
 """
 import logging
 import re
@@ -85,7 +92,6 @@ class SQLGuardrails:
     @classmethod
     def _ensure_limit(cls, sql: str) -> str:
         """Добавить LIMIT если отсутствует."""
-        from src.config.settings import get_settings
         settings = get_settings()
         sql_upper = sql.upper()
 
@@ -116,3 +122,31 @@ class SQLGuardrails:
                     logger.warning(f"Reduced LIMIT from {limit_val} to {settings.sql_max_limit}")
 
         return sql
+
+    @classmethod
+    def is_safe_operation(cls, sql: str) -> bool:
+        """
+        Быстрая проверка безопасности.
+
+        Args:
+            sql: SQL запрос.
+
+        Returns:
+            True если безопасен.
+        """
+        is_safe, _ = cls.validate(sql)
+        return is_safe
+
+    @classmethod
+    def get_blocked_reason(cls, sql: str) -> str:
+        """
+        Получить причину блокировки.
+
+        Args:
+            sql: SQL запрос.
+
+        Returns:
+            Причина блокировки или пустая строка.
+        """
+        is_safe, reason = cls.validate(sql)
+        return "" if is_safe else reason
